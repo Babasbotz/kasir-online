@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kasir Online</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 *{box-sizing:border-box;font-family:Inter}
 body{margin:0;background:#f1f5f9;padding:20px}
 
+/* ===== LAYOUT ===== */
 .container{
   max-width:1100px;
   margin:auto;
@@ -19,16 +20,15 @@ body{margin:0;background:#f1f5f9;padding:20px}
   grid-template-columns:1.1fr 0.9fr;
   gap:20px;
 }
-
 .card{
   background:#fff;
   border-radius:18px;
   padding:20px;
   box-shadow:0 12px 30px rgba(0,0,0,.08);
 }
-
 h2{margin:0 0 15px}
 
+/* ===== FORM ===== */
 label{font-size:13px;color:#555}
 input,select{
   width:100%;
@@ -38,7 +38,7 @@ input,select{
   margin:6px 0 12px;
 }
 
-/* PRODUK */
+/* ===== PRODUK ===== */
 .product{
   display:flex;
   justify-content:space-between;
@@ -46,28 +46,26 @@ input,select{
   padding:10px 0;
   border-bottom:1px solid #eee;
 }
-
 .qty{display:flex;gap:8px;align-items:center}
 .qty button{
   width:28px;height:28px;
   border:none;border-radius:8px;
   background:#4f46e5;color:#fff;
+  cursor:pointer;
 }
 
-/* KASIR */
+/* ===== KASIR ===== */
 .cart-item{
   display:flex;
   justify-content:space-between;
   font-size:14px;
   margin-bottom:6px;
 }
-
 .total{
   font-weight:700;
   font-size:16px;
   margin:10px 0;
 }
-
 button.primary{
   width:100%;
   padding:12px;
@@ -79,41 +77,88 @@ button.primary{
   cursor:pointer;
 }
 
-/* STRUK */
+/* ===== STRUK ELEGAN ===== */
 .struk-wrap{
   display:flex;
   justify-content:center;
-  margin-top:15px;
+  margin-top:20px;
 }
 
 .struk{
-  width:290px;
-  background:#fff;
-  padding:14px;
-  border-radius:12px;
-  font-family:monospace;
+  width:340px;
+  background:#ffffff;
+  padding:18px 16px;
+  border-radius:16px;
+  box-shadow:0 15px 35px rgba(0,0,0,.12);
   font-size:13px;
-  border:1px dashed #bbb;
+  color:#111;
 }
 
-.center{text-align:center}
-.line{display:flex;justify-content:space-between}
-.section{margin:6px 0}
-
-hr{
-  border:none;
-  border-top:1px dashed #999;
-  margin:8px 0;
+.struk-header{
+  text-align:center;
+  margin-bottom:10px;
+}
+.struk-header h3{
+  margin:0;
+  font-size:16px;
+  font-weight:700;
+}
+.struk-header span{
+  font-size:12px;
+  color:#666;
 }
 
-/* ACTION */
+.hr{
+  border-top:1px dashed #ccc;
+  margin:10px 0;
+}
+
+.info{
+  font-size:12px;
+  color:#333;
+  line-height:1.6;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin:4px 0;
+}
+
+.items{
+  margin-top:6px;
+}
+
+.total-box{
+  background:#f8fafc;
+  padding:10px;
+  border-radius:12px;
+  margin-top:8px;
+}
+
+.total-box .row{
+  font-weight:600;
+}
+
+.total-box .grand{
+  font-size:15px;
+  font-weight:700;
+}
+
+.footer{
+  text-align:center;
+  font-size:12px;
+  color:#555;
+  margin-top:10px;
+}
+
+/* ===== ACTION ===== */
 .actions{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:10px;
-  margin-top:10px;
+  margin-top:12px;
 }
-
 .actions button{
   padding:10px;
   border:none;
@@ -121,7 +166,6 @@ hr{
   color:#fff;
   cursor:pointer;
 }
-
 .download{background:#2563eb}
 .share{background:#22c55e}
 .print{background:#6b7280}
@@ -173,10 +217,10 @@ hr{
 <h2>🧾 Kasir</h2>
 
 <label>Nama Pembeli</label>
-<input id="nama" placeholder="Nama pembeli">
+<input id="nama">
 
 <label>Nomor WhatsApp</label>
-<input id="hp" placeholder="08xxxxxxxxxx">
+<input id="hp">
 
 <label>Metode Pembayaran</label>
 <select id="metode">
@@ -202,12 +246,11 @@ hr{
 let cart={}, total=0;
 
 function generateID(){
-  return "TRX-" + Date.now().toString().slice(-6) + Math.floor(Math.random()*90+10);
+ return "TRX-"+Date.now().toString().slice(-8);
 }
-
-function formatWaktu(){
-  let d=new Date();
-  return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
+function waktu(){
+ let d=new Date();
+ return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
 }
 
 function ubahQty(nama,harga,step){
@@ -227,8 +270,8 @@ function renderCart(){
    total+=i.harga*i.qty;
    c.innerHTML+=`
    <div class="cart-item">
-   <span>${n} x${i.qty}</span>
-   <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+     <span>${n} x${i.qty}</span>
+     <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
    </div>`;
   }
  });
@@ -236,18 +279,15 @@ function renderCart(){
 }
 
 function buatStruk(){
- let bayar=Number(document.getElementById("bayar").value);
+ let bayar=Number(bayarInput.value=bayar.value);
  if(bayar<total) return alert("Uang kurang");
 
- let idTrx=generateID();
- let waktu=formatWaktu();
-
- let items="";
+ let itemHTML="";
  Object.keys(cart).forEach(n=>{
   let i=cart[n];
   if(i.qty>0){
-   items+=`
-   <div class="line">
+   itemHTML+=`
+   <div class="row">
      <span>${n} x${i.qty}</span>
      <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
    </div>`;
@@ -258,50 +298,43 @@ function buatStruk(){
  <div class="struk-wrap">
  <div class="struk" id="struk">
 
-   <div class="center"><b>STRUK PEMBELIAN</b></div>
-   <div class="center">Kasir Online</div>
+  <div class="struk-header">
+    <h3>STRUK PEMBELIAN</h3>
+    <span>Kasir Online</span>
+  </div>
 
-   <hr>
+  <div class="hr"></div>
 
-   <div class="section">
-     ID : ${idTrx}<br>
-     Waktu : ${waktu}
-   </div>
+  <div class="info">
+    ID Transaksi : ${generateID()}<br>
+    Waktu : ${waktu()}<br>
+    Nama : ${nama.value}<br>
+    No HP : ${hp.value}
+  </div>
 
-   <hr>
+  <div class="hr"></div>
 
-   <div class="section">
-     Nama : ${nama.value}<br>
-     No HP : ${hp.value}
-   </div>
+  <div class="items">${itemHTML}</div>
 
-   <hr>
+  <div class="total-box">
+    <div class="row"><span>Total</span><span>Rp${total.toLocaleString()}</span></div>
+    <div class="row"><span>Bayar</span><span>Rp${bayar.toLocaleString()}</span></div>
+    <div class="row grand"><span>Kembali</span><span>Rp${(bayar-total).toLocaleString()}</span></div>
+  </div>
 
-   ${items}
+  <div class="hr"></div>
 
-   <hr>
+  <div class="info">Metode Pembayaran : <b>${metode.value}</b></div>
 
-   <div class="line"><b>Total</b><b>Rp${total.toLocaleString()}</b></div>
-   <div class="line">Bayar<span>Rp${bayar.toLocaleString()}</span></div>
-   <div class="line">Kembali<span>Rp${(bayar-total).toLocaleString()}</span></div>
-
-   <hr>
-
-   <div class="center">
-     Metode Pembayaran <br>${metode.value}
-   </div>
-
-   <hr>
-
-   <div class="center">Terima kasih 🙏</div>
+  <div class="footer">Terima kasih telah berbelanja 🙏</div>
 
  </div>
  </div>
 
  <div class="actions">
-   <button class="download" onclick="downloadStruk()">Download</button>
-   <button class="share" onclick="shareStruk()">Bagikan</button>
-   <button class="print" onclick="window.print()">Print</button>
+  <button class="download" onclick="downloadStruk()">Download</button>
+  <button class="share" onclick="shareStruk()">Bagikan</button>
+  <button class="print" onclick="window.print()">Print</button>
  </div>`;
 }
 
@@ -323,19 +356,12 @@ async function shareStruk(){
    if(navigator.canShare && navigator.canShare({files:[file]})){
     await navigator.share({files:[file]});
    }else{
-    kirimWA();
+    alert("Browser tidak mendukung share gambar");
    }
   });
  });
 }
-
-function kirimWA(){
- let hpVal=hp.value;
- if(hpVal.startsWith("0")) hpVal="62"+hpVal.slice(1);
- let pesan=`STRUK PEMBELIAN\nID: ${Date.now()}\nTotal: Rp${total.toLocaleString()}`;
- window.open(`https://wa.me/${hpVal}?text=${encodeURIComponent(pesan)}`,"_blank");
-}
 </script>
 
 </body>
-</html>
+  </html>
