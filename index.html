@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasir Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+*{box-sizing:border-box;font-family:Inter}
+body{
+  background:#f3f4f6;
+  margin:0;
+  padding:20px;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+h2{margin-top:0}
+.product{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:12px;
+}
+button{
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#2563eb;
+  color:#fff;
+  font-weight:600;
+}
+button:hover{opacity:.9}
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:6px;
+}
+.total{
+  font-weight:700;
+  margin-top:10px;
+}
+input{
+  width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  margin-top:6px;
+}
+
+/* STRUK */
+.struk-wrapper{
+  display:flex;
+  justify-content:center;
+}
+.struk{
+  width:280px;
+  background:#fff;
+  padding:15px;
+  border-radius:12px;
+  font-family:monospace;
+  font-size:13px;
+  box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+.struk h3{
+  text-align:center;
+  margin:0;
+}
+.line{
+  border-top:1px dashed #aaa;
+  margin:8px 0;
+}
+.struk-item{
+  display:flex;
+  justify-content:space-between;
+}
+.center{text-align:center}
+
+.action-btn{
+  margin-top:10px;
+  width:100%;
+}
+.download{background:#16a34a}
+.print{background:#0f766e}
+
+@media(max-width:768px){
+  .container{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- PRODUK -->
+  <div class="card">
+    <h2>🛒 Produk</h2>
+    <div class="product">
+      <span>Premium User</span>
+      <span>Rp10.000 <button onclick="addItem('Premium User',10000)">+</button></span>
+    </div>
+    <div class="product">
+      <span>Sewa Bot Basic</span>
+      <span>Rp25.000 <button onclick="addItem('Sewa Bot Basic',25000)">+</button></span>
+    </div>
+    <div class="product">
+      <span>Sewa Bot VVIP</span>
+      <span>Rp50.000 <button onclick="addItem('Sewa Bot VVIP',50000)">+</button></span>
+    </div>
+  </div>
+
+  <!-- KASIR -->
+  <div class="card">
+    <h2>🧾 Kasir</h2>
+    <div id="cart"></div>
+    <div class="total">Total: Rp<span id="total">0</span></div>
+
+    <label>Bayar</label>
+    <input type="number" id="bayar" placeholder="Masukkan uang bayar">
+
+    <button class="action-btn" onclick="buatStruk()">Bayar & Buat Struk</button>
+
+    <div id="hasilStruk"></div>
+  </div>
+</div>
+
+<script>
+let cart = [];
+let total = 0;
+
+function addItem(nama, harga){
+  cart.push({nama,harga});
+  total += harga;
+  renderCart();
+}
+
+function renderCart(){
+  const cartDiv = document.getElementById("cart");
+  cartDiv.innerHTML = "";
+  cart.forEach(item=>{
+    cartDiv.innerHTML += `
+      <div class="cart-item">
+        <span>${item.nama}</span>
+        <span>Rp${item.harga.toLocaleString()}</span>
+      </div>`;
+  });
+  document.getElementById("total").innerText = total.toLocaleString();
+}
+
+function buatStruk(){
+  const bayar = parseInt(document.getElementById("bayar").value);
+  if(!bayar || bayar < total){
+    alert("Uang bayar kurang!");
+    return;
+  }
+  const kembali = bayar - total;
+  let items = "";
+  cart.forEach(i=>{
+    items += `
+      <div class="struk-item">
+        <span>${i.nama}</span>
+        <span>${i.harga.toLocaleString()}</span>
+      </div>`;
+  });
+
+  document.getElementById("hasilStruk").innerHTML = `
+  <div class="struk-wrapper">
+    <div class="struk" id="struk">
+      <h3>TOKO ONLINE</h3>
+      <div class="center">Jl. Internet No.1</div>
+      <div class="line"></div>
+
+      ${items}
+
+      <div class="line"></div>
+      <div class="struk-item"><b>Total</b><b>${total.toLocaleString()}</b></div>
+      <div class="struk-item">Bayar<span>${bayar.toLocaleString()}</span></div>
+      <div class="struk-item">Kembali<span>${kembali.toLocaleString()}</span></div>
+
+      <div class="line"></div>
+      <div class="center">Terima Kasih 🙏</div>
+    </div>
+  </div>
+
+  <button class="action-btn download" onclick="downloadStruk()">📥 Download Struk</button>
+  <button class="action-btn print" onclick="window.print()">🖨 Print</button>
+  `;
+}
+
+function downloadStruk(){
+  const struk = document.getElementById("struk");
+  html2canvas(struk,{scale:2}).then(canvas=>{
+    const link = document.createElement("a");
+    link.download = "struk-belanja.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+}
+</script>
+
+</body>
+</html>
