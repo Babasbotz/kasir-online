@@ -4,212 +4,206 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kasir Online</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <style>
 *{box-sizing:border-box;font-family:Inter}
-body{
-  background:#f3f4f6;
-  margin:0;
-  padding:20px;
-}
-.container{
-  max-width:900px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-}
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.08);
-}
-h2{margin-top:0}
-.product{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:12px;
-}
-button{
-  padding:8px 14px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  background:#2563eb;
-  color:#fff;
-  font-weight:600;
-}
+body{margin:0;background:#f3f4f6;padding:20px}
+.container{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
+h2{margin:0 0 15px}
+
+/* PRODUK */
+.product{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
+.product:last-child{border:none}
+button{border:none;padding:8px 14px;border-radius:10px;background:#2563eb;color:#fff;font-weight:600;cursor:pointer}
 button:hover{opacity:.9}
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:6px;
-}
-.total{
-  font-weight:700;
-  margin-top:10px;
-}
+
+/* KERANJANG */
+.cart-item{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.total{font-size:18px;font-weight:700;margin-top:10px}
+
+/* INPUT */
 input{
   width:100%;
-  padding:10px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
   border:1px solid #ddd;
   margin-top:6px;
 }
 
-/* STRUK */
-.struk-wrapper{
-  display:flex;
-  justify-content:center;
+/* METODE */
+.metode-box{display:flex;gap:10px;margin-top:10px}
+.metode{
+  flex:1;
+  padding:14px;
+  border-radius:14px;
+  border:2px solid #e5e7eb;
+  text-align:center;
+  font-weight:600;
+  cursor:pointer;
 }
+.metode.active{
+  border-color:#2563eb;
+  background:#eff6ff;
+}
+
+/* STRUK */
+.struk-wrapper{display:flex;justify-content:center;margin-top:15px}
 .struk{
-  width:280px;
+  width:300px;
   background:#fff;
-  padding:15px;
-  border-radius:12px;
+  padding:16px;
+  border-radius:14px;
   font-family:monospace;
   font-size:13px;
-  box-shadow:0 5px 20px rgba(0,0,0,.15);
+  box-shadow:0 6px 25px rgba(0,0,0,.2);
 }
-.struk h3{
-  text-align:center;
-  margin:0;
-}
-.line{
-  border-top:1px dashed #aaa;
-  margin:8px 0;
-}
-.struk-item{
-  display:flex;
-  justify-content:space-between;
-}
+.struk h3{text-align:center;margin:0}
 .center{text-align:center}
+.line{border-top:1px dashed #999;margin:8px 0}
+.struk-item{display:flex;justify-content:space-between}
 
-.action-btn{
-  margin-top:10px;
-  width:100%;
-}
+/* AKSI */
+.action-btn{width:100%;margin-top:10px}
 .download{background:#16a34a}
 .print{background:#0f766e}
 
-@media(max-width:768px){
-  .container{grid-template-columns:1fr}
-}
+@media(max-width:768px){.container{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- PRODUK -->
-  <div class="card">
-    <h2>🛒 Produk</h2>
-    <div class="product">
-      <span>Premium User</span>
-      <span>Rp10.000 <button onclick="addItem('Premium User',10000)">+</button></span>
-    </div>
-    <div class="product">
-      <span>Sewa Bot Basic</span>
-      <span>Rp25.000 <button onclick="addItem('Sewa Bot Basic',25000)">+</button></span>
-    </div>
-    <div class="product">
-      <span>Sewa Bot VVIP</span>
-      <span>Rp50.000 <button onclick="addItem('Sewa Bot VVIP',50000)">+</button></span>
-    </div>
-  </div>
 
-  <!-- KASIR -->
-  <div class="card">
-    <h2>🧾 Kasir</h2>
-    <div id="cart"></div>
-    <div class="total">Total: Rp<span id="total">0</span></div>
+<!-- PRODUK -->
+<div class="card">
+<h2>🛒 Produk</h2>
+<div class="product"><span>Premium User</span><button onclick="addItem('Premium User',10000)">Rp10.000</button></div>
+<div class="product"><span>Sewa Bot Basic</span><button onclick="addItem('Sewa Bot Basic',25000)">Rp25.000</button></div>
+<div class="product"><span>Sewa Bot VVIP</span><button onclick="addItem('Sewa Bot VVIP',50000)">Rp50.000</button></div>
+</div>
 
-    <label>Bayar</label>
-    <input type="number" id="bayar" placeholder="Masukkan uang bayar">
+<!-- KASIR -->
+<div class="card">
+<h2>🧾 Kasir</h2>
 
-    <button class="action-btn" onclick="buatStruk()">Bayar & Buat Struk</button>
+<!-- DATA PEMBELI -->
+<label>Nama Pembeli</label>
+<input type="text" id="namaPembeli" placeholder="Contoh: Budi">
 
-    <div id="hasilStruk"></div>
-  </div>
+<label>Nomor Pembeli (HP)</label>
+<input type="number" id="hpPembeli" placeholder="08xxxxxxxxxx">
+
+<div style="margin-top:15px"></div>
+
+<div id="cart"></div>
+<div class="total">Total: Rp<span id="total">0</span></div>
+
+<h3 style="margin-top:20px">💳 Metode Pembayaran</h3>
+<div class="metode-box">
+<div class="metode" onclick="pilihMetode(this,'DANA')">DANA</div>
+<div class="metode" onclick="pilihMetode(this,'QRIS')">QRIS</div>
+<div class="metode" onclick="pilihMetode(this,'GoPay')">GoPay</div>
+</div>
+<input type="hidden" id="metode">
+
+<label style="margin-top:15px;display:block">Uang Bayar</label>
+<input type="number" id="bayar" placeholder="Masukkan nominal">
+
+<button class="action-btn" onclick="buatStruk()">Bayar & Buat Struk</button>
+<div id="hasilStruk"></div>
+</div>
+
 </div>
 
 <script>
-let cart = [];
-let total = 0;
+let cart=[], total=0;
 
-function addItem(nama, harga){
-  cart.push({nama,harga});
-  total += harga;
-  renderCart();
+function addItem(nama,harga){
+cart.push({nama,harga});
+total+=harga;
+renderCart();
 }
 
 function renderCart(){
-  const cartDiv = document.getElementById("cart");
-  cartDiv.innerHTML = "";
-  cart.forEach(item=>{
-    cartDiv.innerHTML += `
-      <div class="cart-item">
-        <span>${item.nama}</span>
-        <span>Rp${item.harga.toLocaleString()}</span>
-      </div>`;
-  });
-  document.getElementById("total").innerText = total.toLocaleString();
+let html="";
+cart.forEach(i=>{
+  html+=`<div class="cart-item"><span>${i.nama}</span><span>Rp${i.harga.toLocaleString()}</span></div>`;
+});
+document.getElementById("cart").innerHTML=html;
+document.getElementById("total").innerText=total.toLocaleString();
+}
+
+function pilihMetode(el,m){
+document.querySelectorAll(".metode").forEach(x=>x.classList.remove("active"));
+el.classList.add("active");
+document.getElementById("metode").value=m;
 }
 
 function buatStruk(){
-  const bayar = parseInt(document.getElementById("bayar").value);
-  if(!bayar || bayar < total){
-    alert("Uang bayar kurang!");
-    return;
-  }
-  const kembali = bayar - total;
-  let items = "";
-  cart.forEach(i=>{
-    items += `
-      <div class="struk-item">
-        <span>${i.nama}</span>
-        <span>${i.harga.toLocaleString()}</span>
-      </div>`;
-  });
+const nama=document.getElementById("namaPembeli").value;
+const hp=document.getElementById("hpPembeli").value;
+const bayar=parseInt(document.getElementById("bayar").value);
+const metode=document.getElementById("metode").value;
 
-  document.getElementById("hasilStruk").innerHTML = `
-  <div class="struk-wrapper">
-    <div class="struk" id="struk">
-      <h3>TOKO ONLINE</h3>
-      <div class="center">Jl. Internet No.1</div>
-      <div class="line"></div>
+if(!nama||!hp) return alert("Isi nama & nomor pembeli");
+if(!metode) return alert("Pilih metode pembayaran");
+if(!bayar||bayar<total) return alert("Uang bayar kurang");
 
-      ${items}
+const no="TRX"+Date.now();
+const tgl=new Date().toLocaleString("id-ID");
+const kembali=bayar-total;
 
-      <div class="line"></div>
-      <div class="struk-item"><b>Total</b><b>${total.toLocaleString()}</b></div>
-      <div class="struk-item">Bayar<span>${bayar.toLocaleString()}</span></div>
-      <div class="struk-item">Kembali<span>${kembali.toLocaleString()}</span></div>
+let items="";
+cart.forEach(i=>{
+items+=`<div class="struk-item"><span>${i.nama}</span><span>${i.harga.toLocaleString()}</span></div>`;
+});
 
-      <div class="line"></div>
-      <div class="center">Terima Kasih 🙏</div>
-    </div>
-  </div>
+document.getElementById("hasilStruk").innerHTML=`
+<div class="struk-wrapper">
+<div class="struk" id="struk">
+<h3>TOKO ONLINE</h3>
+<div class="center">${tgl}</div>
+<div class="center">${no}</div>
 
-  <button class="action-btn download" onclick="downloadStruk()">📥 Download Struk</button>
-  <button class="action-btn print" onclick="window.print()">🖨 Print</button>
-  `;
+<div class="line"></div>
+<div>Nama : ${nama}</div>
+<div>HP   : ${hp}</div>
+
+<div class="line"></div>
+${items}
+<div class="line"></div>
+
+<div class="struk-item"><b>Total</b><b>${total.toLocaleString()}</b></div>
+<div class="struk-item">Bayar<span>${bayar.toLocaleString()}</span></div>
+<div class="struk-item">Kembali<span>${kembali.toLocaleString()}</span></div>
+
+<div class="line"></div>
+<div class="center">Metode Pembayaran</div>
+<div class="center"><b>${metode}</b></div>
+
+<div class="line"></div>
+<div class="center">Terima Kasih 🙏</div>
+</div>
+</div>
+
+<button class="action-btn download" onclick="downloadStruk()">📥 Download Struk</button>
+<button class="action-btn print" onclick="window.print()">🖨 Print</button>
+`;
 }
 
 function downloadStruk(){
-  const struk = document.getElementById("struk");
-  html2canvas(struk,{scale:2}).then(canvas=>{
-    const link = document.createElement("a");
-    link.download = "struk-belanja.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-  });
+html2canvas(document.getElementById("struk"),{scale:2}).then(c=>{
+let a=document.createElement("a");
+a.download="struk.png";
+a.href=c.toDataURL();
+a.click();
+});
 }
 </script>
 
 </body>
-</html>
+  </html>
