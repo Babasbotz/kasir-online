@@ -126,9 +126,9 @@ footer{width:100%;max-width:420px;text-align:center;color:rgba(255,255,255,.5);f
   <span class="arrow">▼</span>
 </div>
 <div class="dropdown-options" id="options-payment">
-  <div onclick="selectOption('payment','gopay')">GoPay</div>
-  <div onclick="selectOption('payment','dana')">DANA</div>
-  <div onclick="selectOption('payment','qris')">QRIS</div>
+  <div onclick="selectOption('payment','GOPAY')">GoPay</div>
+  <div onclick="selectOption('payment','DANA')">DANA</div>
+  <div onclick="selectOption('payment','QRIS')">QRIS</div>
 </div>
 </div>
 
@@ -253,9 +253,9 @@ function animateTotal(){
 function updatePaymentInfo(){
   const paymentInfo=document.getElementById("paymentInfo");
   paymentInfo.classList.remove("hidden");
-  if(payment==="gopay") paymentInfo.innerHTML='<div style="text-align:center;">GoPay<br><b>0898-8189-120</b></div>';
-  else if(payment==="dana") paymentInfo.innerHTML='<div style="text-align:center;">DANA<br><b>0898-8189-120</b></div>';
-  else if(payment==="qris") paymentInfo.innerHTML=`<div style="text-align:center;">QRIS<br><img src="https://i.ibb.co.com/XZMcFrSk/image-8c47b4bf-5822-484c-a6c0-93560ceca2a0.png" style="width:140px;border-radius:12px;"></div>`;
+  if(payment==="GOPAY") paymentInfo.innerHTML='<div style="text-align:center;">GoPay<br><b>0898-8189-120</b></div>';
+  else if(payment==="DANA") paymentInfo.innerHTML='<div style="text-align:center;">DANA<br><b>0898-8189-120</b></div>';
+  else if(payment==="QRIS") paymentInfo.innerHTML=`<div style="text-align:center;">QRIS<br><img src="https://i.ibb.co.com/XZMcFrSk/image-8c47b4bf-5822-484c-a6c0-93560ceca2a0.png" style="width:140px;border-radius:12px;"></div>`;
 }
 
 function beli(){
