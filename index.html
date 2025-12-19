@@ -3,297 +3,217 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kasir Online</title>
+<title>Payment Order</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-*{box-sizing:border-box;font-family:Inter}
-body{margin:0;background:#eef2f7;padding:20px}
-
-/* Layout */
-.container{
-  max-width:1100px;
-  margin:auto;
-  display:grid;
-  grid-template-columns:1.1fr 0.9fr;
-  gap:20px;
+:root{
+  --primary:#6366f1;
+  --bg:#0f172a;
+  --card:#020617cc;
+  --border:rgba(255,255,255,.1);
+  --text:#e5e7eb;
 }
+
+*{
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#0f172a,#020617);
+  color:var(--text);
+}
+
 .card{
-  background:#fff;
+  width:100%;
+  max-width:420px;
+  padding:28px;
   border-radius:18px;
-  padding:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  background:var(--card);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--border);
+  box-shadow:0 25px 60px rgba(0,0,0,.4);
 }
-h2{margin:0 0 15px}
 
-/* Form */
-label{font-size:13px;color:#555}
+h1{
+  margin:0 0 6px;
+  font-size:22px;
+  text-align:center;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:13px;
+  opacity:.7;
+  margin-bottom:22px;
+}
+
+.form-group{
+  margin-bottom:14px;
+}
+
+label{
+  font-size:13px;
+  display:block;
+  margin-bottom:6px;
+  opacity:.85;
+}
+
 input,select{
   width:100%;
-  padding:10px 12px;
-  border-radius:10px;
-  border:1px solid #ddd;
-  margin:6px 0 12px;
-}
-
-/* Produk */
-.product{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 0;
-  border-bottom:1px solid #eee;
-}
-.qty{display:flex;gap:8px;align-items:center}
-.qty button{
-  width:28px;height:28px;
-  border:none;border-radius:8px;
-  background:#4f46e5;color:#fff;
-  cursor:pointer;
-}
-
-/* Cart */
-.cart-item{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:6px;
-}
-.total{
-  font-weight:700;
-  font-size:16px;
-  margin:10px 0;
-}
-button.primary{
-  width:100%;
-  padding:12px;
-  border:none;
+  padding:12px 14px;
   border-radius:12px;
-  background:#4f46e5;
+  background:#020617;
+  border:1px solid var(--border);
   color:#fff;
+  outline:none;
+}
+
+input:focus,select:focus{
+  border-color:var(--primary);
+}
+
+.total{
+  margin:18px 0;
+  padding:14px;
+  border-radius:12px;
+  background:#020617;
+  border:1px dashed var(--primary);
+  text-align:center;
+  font-weight:600;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#6366f1,#4f46e5);
+  color:white;
+  font-size:15px;
   font-weight:600;
   cursor:pointer;
+  transition:.3s;
 }
 
-/* ===== STRUK ===== */
-.struk-wrap{display:flex;justify-content:center;margin-top:25px}
-.struk-frame{
-  background:linear-gradient(135deg,#4f46e5,#6366f1);
-  padding:3px;border-radius:20px
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 30px rgba(99,102,241,.45);
 }
-.struk{
-  width:360px;background:#fff;border-radius:18px;
-  padding:18px;font-size:13px
-}
-.struk-header{text-align:center;border-bottom:1px solid #eee;padding-bottom:10px}
-.struk-header h3{margin:0;font-size:17px}
-.struk-header span{font-size:12px;color:#666}
-.section{margin-top:12px}
-.section-title{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase}
-.row{display:flex;justify-content:space-between;margin:6px 0}
-.total-box{
-  background:#f8fafc;padding:12px;border-radius:14px;margin-top:10px
-}
-.total-box .grand{font-size:15px;font-weight:700}
-.footer{text-align:center;margin-top:14px;font-size:12px;color:#555}
-
-/* Actions */
-.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
-.actions button{
-  padding:10px;border:none;border-radius:10px;color:#fff;cursor:pointer
-}
-.download{background:#2563eb}
-.share{background:#22c55e}
-.print{background:#6b7280}
-
-@media(max-width:900px){.container{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
-<div class="container">
-
 <div class="card">
-<h2>🛒 Produk</h2>
+  <h1>Payment Order</h1>
+  <div class="subtitle">Lengkapi data & kirim ke WhatsApp</div>
 
-<div class="product">
-<span>Premium User</span>
-<div class="qty">
-<button onclick="ubahQty('Premium User',10000,-1)">-</button>
-<span id="qPremium User">0</span>
-<button onclick="ubahQty('Premium User',10000,1)">+</button>
-</div>
-</div>
+  <div class="form-group">
+    <label>Nama</label>
+    <input type="text" id="nama" placeholder="Nama kamu">
+  </div>
 
-<div class="product">
-<span>Sewa Bot Basic</span>
-<div class="qty">
-<button onclick="ubahQty('Sewa Bot Basic',25000,-1)">-</button>
-<span id="qSewa Bot Basic">0</span>
-<button onclick="ubahQty('Sewa Bot Basic',25000,1)">+</button>
-</div>
-</div>
+  <div class="form-group">
+    <label>Produk</label>
+    <select id="produk" onchange="updateHarga()">
+      <option value="">-- Pilih Produk --</option>
+      <option value="Premium User">Premium User</option>
+      <option value="Sewabot Grup">Sewabot Grup</option>
+    </select>
+  </div>
 
-</div>
+  <div class="form-group">
+    <label>Durasi</label>
+    <select id="durasi" onchange="updateHarga()">
+      <option value="">-- Pilih Durasi --</option>
+      <option value="1 Bulan">1 Bulan</option>
+      <option value="3 Bulan">3 Bulan</option>
+      <option value="1 Tahun">1 Tahun</option>
+    </select>
+  </div>
 
-<div class="card">
-<h2>🧾 Kasir</h2>
+  <div class="form-group">
+    <label>Metode Pembayaran</label>
+    <select id="payment">
+      <option value="">-- Pilih Metode --</option>
+      <option value="Dana">Dana</option>
+      <option value="OVO">OVO</option>
+      <option value="GoPay">GoPay</option>
+      <option value="Transfer Bank">Transfer Bank</option>
+    </select>
+  </div>
 
-<label>Nama Pembeli</label>
-<input id="nama">
+  <div class="total">
+    Total Harga: <span id="harga">Rp 0</span>
+  </div>
 
-<label>No WhatsApp</label>
-<input id="hp">
-
-<label>Metode Pembayaran</label>
-<select id="metode">
-<option>DANA</option>
-<option>QRIS</option>
-<option>GoPay</option>
-</select>
-
-<div id="cart"></div>
-<div class="total">Total: Rp<span id="total">0</span></div>
-
-<label>Uang Bayar</label>
-<input id="bayar" type="number">
-
-<button class="primary" onclick="buatStruk()">Bayar & Buat Struk</button>
-
-<div id="hasil"></div>
-</div>
-
+  <button onclick="kirimWA()">Kirim ke WhatsApp</button>
 </div>
 
 <script>
-let cart={}, total=0;
-const rupiah=n=>n.toLocaleString("id-ID");
+const hargaProduk = {
+  "Premium User":{
+    "1 Bulan":15000,
+    "3 Bulan":40000,
+    "1 Tahun":120000
+  },
+  "Sewabot Grup":{
+    "1 Bulan":20000,
+    "3 Bulan":55000,
+    "1 Tahun":150000
+  }
+};
 
-function generateID(){
-  return "TRX-"+Date.now().toString().slice(-8);
-}
-function waktu(){
-  const d=new Date();
-  return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
-}
+function updateHarga(){
+  const produk = document.getElementById("produk").value;
+  const durasi = document.getElementById("durasi").value;
+  const hargaEl = document.getElementById("harga");
 
-function ubahQty(nama,harga,step){
-  if(!cart[nama]) cart[nama]={harga,qty:0};
-  cart[nama].qty=Math.max(0,cart[nama].qty+step);
-  document.getElementById("q"+nama).innerText=cart[nama].qty;
-  renderCart();
-}
-
-function renderCart(){
-  const c=document.getElementById("cart");
-  c.innerHTML=""; total=0;
-  Object.keys(cart).forEach(n=>{
-    const i=cart[n];
-    if(i.qty){
-      total+=i.harga*i.qty;
-      c.innerHTML+=`
-        <div class="cart-item">
-          <span>${n} x${i.qty}</span>
-          <span>Rp${rupiah(i.harga*i.qty)}</span>
-        </div>`;
-    }
-  });
-  document.getElementById("total").innerText=rupiah(total);
+  if(produk && durasi){
+    const harga = hargaProduk[produk][durasi];
+    hargaEl.innerText = "Rp " + harga.toLocaleString("id-ID");
+  }else{
+    hargaEl.innerText = "Rp 0";
+  }
 }
 
-function buatStruk(){
-  const namaVal=document.getElementById("nama").value||"-";
-  const hpVal=document.getElementById("hp").value||"-";
-  const metodeVal=document.getElementById("metode").value;
-  const bayarVal=Number(document.getElementById("bayar").value);
+function kirimWA(){
+  const nama = document.getElementById("nama").value;
+  const produk = document.getElementById("produk").value;
+  const durasi = document.getElementById("durasi").value;
+  const payment = document.getElementById("payment").value;
+  const harga = document.getElementById("harga").innerText;
 
-  if(!total) return alert("Belum ada produk");
-  if(bayarVal<total) return alert("Uang kurang");
+  if(!nama || !produk || !durasi || !payment){
+    alert("Lengkapi semua data terlebih dahulu");
+    return;
+  }
 
-  let items="";
-  Object.keys(cart).forEach(n=>{
-    const i=cart[n];
-    if(i.qty){
-      items+=`
-        <div class="row">
-          <span>${n} x${i.qty}</span>
-          <span>Rp${rupiah(i.harga*i.qty)}</span>
-        </div>`;
-    }
-  });
+  const noWA = "6281274717032"; // GANTI nomor WhatsApp kamu
 
-  document.getElementById("hasil").innerHTML=`
-  <div class="struk-wrap">
-    <div class="struk-frame">
-      <div class="struk" id="struk">
+  const pesan = `
+📦 *ORDER BARU*
 
-        <div class="struk-header">
-          <h3>BUKTI PEMBAYARAN</h3>
-          <span>Kasir Online</span>
-        </div>
+👤 Nama: ${nama}
+📦 Produk: ${produk}
+⏳ Durasi: ${durasi}
+💳 Pembayaran: ${payment}
+💰 Total: ${harga}
 
-        <div class="section">
-          <div class="section-title">Transaksi</div>
-          ID: ${generateID()}<br>Waktu: ${waktu()}
-        </div>
+Mohon diproses ya 🙏
+`;
 
-        <div class="section">
-          <div class="section-title">Pembeli</div>
-          Nama: ${namaVal}<br>No HP: ${hpVal}
-        </div>
-
-        <div class="section">
-          <div class="section-title">Item</div>
-          ${items}
-        </div>
-
-        <div class="total-box">
-          <div class="row"><span>Total</span><span>Rp${rupiah(total)}</span></div>
-          <div class="row"><span>Bayar</span><span>Rp${rupiah(bayarVal)}</span></div>
-          <div class="row grand"><span>Kembali</span><span>Rp${rupiah(bayarVal-total)}</span></div>
-        </div>
-
-        <div class="section">
-          <div class="section-title">Metode Pembayaran</div>
-          <b>${metodeVal}</b>
-        </div>
-
-        <div class="footer">Terima kasih telah berbelanja 🙏</div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="actions">
-    <button class="download" onclick="downloadStruk()">Download</button>
-    <button class="share" onclick="shareStruk()">Bagikan</button>
-    <button class="print" onclick="window.print()">Print</button>
-  </div>`;
-}
-
-function downloadStruk(){
-  html2canvas(document.getElementById("struk"),{scale:2})
-  .then(c=>{
-    const a=document.createElement("a");
-    a.href=c.toDataURL("image/png");
-    a.download="struk.png";
-    a.click();
-  });
-}
-
-function shareStruk(){
-  html2canvas(document.getElementById("struk"),{scale:2})
-  .then(c=>c.toBlob(async b=>{
-    const file=new File([b],"struk.png",{type:"image/png"});
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({files:[file]});
-    }else alert("Browser tidak support share gambar");
-  }));
+  const url = "https://wa.me/6281274717032" + noWA + "?text=" + encodeURIComponent(pesan);
+  window.open(url,"_blank");
 }
 </script>
 
 </body>
-</html>
+  </html>
