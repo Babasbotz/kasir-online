@@ -3,296 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Payment Order</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+<title>Pembayaran Inline Dropdown</title>
 <style>
-:root{
-  --primary:#6366f1;
-  --accent:#22d3ee;
-  --bg:#020617;
-  --card:rgba(2,6,23,.78);
-  --border:rgba(255,255,255,.12);
-  --text:#e5e7eb;
-}
-
-*{box-sizing:border-box;font-family:'Inter',sans-serif;}
-
+*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui;margin:0;padding:0;}
 body{
-  margin:0;
   min-height:100vh;
   display:flex;
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle at top,#1e293b,#020617);
-  color:var(--text);
-  overflow:hidden;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  color:#fff;
 }
-
-/* background */
-.blob{
-  position:absolute;
-  width:300px;
-  height:300px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  filter:blur(100px);
-  opacity:.35;
-  animation:float 12s infinite alternate;
-}
-.blob:nth-child(1){top:-80px;left:-80px;}
-.blob:nth-child(2){bottom:-100px;right:-100px;animation-delay:4s;}
-@keyframes float{to{transform:translateY(-40px) scale(1.1);}}
-
-/* card */
 .card{
   width:100%;
   max-width:420px;
   padding:28px;
-  border-radius:22px;
-  background:var(--card);
-  backdrop-filter:blur(18px);
-  border:1px solid var(--border);
-  box-shadow:0 40px 80px rgba(0,0,0,.55);
-  z-index:1;
-  animation:cardIn .8s ease;
+  border-radius:32px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(25px);
+  box-shadow:0 30px 80px rgba(0,0,0,.6);
 }
-@keyframes cardIn{
-  from{opacity:0;transform:translateY(40px);}
-}
+h2{text-align:center;margin-bottom:24px;font-weight:700;font-size:24px;}
 
-h1{text-align:center;margin:0;}
-.subtitle{
-  text-align:center;
-  font-size:13px;
-  opacity:.7;
-  margin:6px 0 24px;
-}
-
-.group{margin-bottom:14px;}
-label{font-size:13px;opacity:.85;display:block;margin-bottom:6px;}
-
-input{
+.input-group{margin-bottom:18px;}
+.input-group label{display:block;font-size:13px;opacity:.8;margin-bottom:6px;}
+.input-group input{
   width:100%;
-  padding:13px 15px;
-  border-radius:14px;
-  background:#020617;
-  border:1px solid var(--border);
-  color:white;
-  outline:none;
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  font-size:14px;
 }
 
-/* dropdown */
-.dropdown{position:relative;}
-.dropdown-btn{
-  padding:13px 15px;
-  border-radius:14px;
-  background:#020617;
-  border:1px solid var(--border);
+/* dropdown inline card */
+.dropdown-card{
+  width:100%;
+  padding:16px;
+  border-radius:18px;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+  font-size:14px;
   cursor:pointer;
   display:flex;
   justify-content:space-between;
   align-items:center;
+  margin-bottom:8px;
+  position:relative;
+  user-select:none;
 }
-.dropdown-list{
-  position:absolute;
-  left:0;right:0;
-  top:110%;
-  background:#020617;
-  border:1px solid var(--border);
+.dropdown-card span.placeholder{opacity:.7;}
+.chevron{transition:.3s;transform:rotate(0deg);}
+.chevron.open{transform:rotate(90deg);}
+
+/* dropdown options inline */
+.dropdown-options{
+  position:relative;
+  background:rgba(255,255,255,.12);
   border-radius:16px;
+  margin-bottom:16px;
   overflow:hidden;
-  box-shadow:0 20px 40px rgba(0,0,0,.6);
-  opacity:0;
-  transform:translateY(10px);
-  pointer-events:none;
-  transition:.35s;
-  z-index:10;
+  max-height:0;
+  transition:max-height .3s ease;
 }
-.dropdown.open .dropdown-list{
-  opacity:1;
-  transform:translateY(0);
-  pointer-events:auto;
-}
-.dropdown-item{
-  padding:14px 16px;
-  cursor:pointer;
-}
-.dropdown-item:hover{
-  background:rgba(99,102,241,.15);
-}
-
-/* total */
-.total{
-  margin:20px 0;
-  padding:18px;
-  border-radius:16px;
-  background:#020617;
-  border:1px dashed var(--primary);
+.dropdown-options.show{max-height:300px;}
+.dropdown-options div{
+  padding:14px;
   text-align:center;
-  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
 }
-.total.animate{
-  animation:pulse .6s ease;
-}
-@keyframes pulse{
-  50%{transform:scale(1.05);box-shadow:0 0 30px rgba(99,102,241,.55);}
-}
+.dropdown-options div:hover{background:rgba(255,255,255,.2);}
+.dropdown-options div.selected{color:#60a5fa;font-weight:600;}
 
-/* button */
+/* harga */
+.total{text-align:center;font-size:26px;font-weight:700;margin:20px 0;}
+.payment-box{
+  background:rgba(255,255,255,.12);
+  border-radius:18px;
+  padding:14px;
+  text-align:center;
+  margin-bottom:18px;
+}
+.payment-box img{width:160px;border-radius:14px;margin-top:10px;}
+
+/* buttons */
 button{
   width:100%;
-  padding:15px;
+  padding:18px;
   border:none;
-  border-radius:16px;
-  background:linear-gradient(135deg,#6366f1,#4f46e5);
-  color:white;
-  font-size:15px;
+  border-radius:24px;
+  font-size:16px;
   font-weight:600;
+  color:#fff;
   cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
   transition:.3s;
 }
-button.loading{
-  pointer-events:none;
-  opacity:.85;
-}
-.spinner{
-  width:18px;
-  height:18px;
-  border:3px solid rgba(255,255,255,.3);
-  border-top:3px solid white;
-  border-radius:50%;
-  animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
+button:hover{transform:scale(1.02);}
+.beli{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 8px 20px rgba(59,130,246,.5);}
+.wa{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 8px 20px rgba(34,197,94,.5);}
+
+.timer{text-align:center;margin-top:14px;font-size:14px;opacity:.8;}
+.error{text-align:center;font-size:13px;color:#fca5a5;margin-bottom:12px;}
+.hidden{display:none;}
+.fade{animation:fade .4s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
 
-<div class="blob"></div>
-<div class="blob"></div>
-
 <div class="card">
-  <h1>Payment Order</h1>
-  <div class="subtitle">Konfirmasi via WhatsApp</div>
+<h2>💳 Pembayaran Modern</h2>
 
-  <div class="group">
-    <label>Nama</label>
-    <input id="nama" placeholder="Nama kamu">
-  </div>
+<div class="input-group">
+<label>Nama</label>
+<input id="nama" placeholder="Isi nama">
+</div>
 
-  <div class="group dropdown" data-name="produk">
-    <label>Produk</label>
-    <div class="dropdown-btn"><span>Pilih Produk</span>⌄</div>
-    <div class="dropdown-list">
-      <div class="dropdown-item" data-value="Premium User">Premium User</div>
-      <div class="dropdown-item" data-value="Sewabot Grup">Sewabot Grup</div>
-    </div>
-  </div>
+<!-- Produk -->
+<div class="dropdown-card" onclick="toggleDropdown('produk')">
+  <span class="placeholder">Pilih Produk</span>
+  <span class="chevron">›</span>
+</div>
+<div class="dropdown-options" id="options-produk">
+  <div onclick="selectOption('produk','Premium')">Premium</div>
+  <div onclick="selectOption('produk','Sewabot')">Sewabot</div>
+</div>
 
-  <div class="group dropdown" data-name="durasi">
-    <label>Durasi</label>
-    <div class="dropdown-btn"><span>Pilih Durasi</span>⌄</div>
-    <div class="dropdown-list">
-      <div class="dropdown-item" data-value="1 Bulan">1 Bulan</div>
-      <div class="dropdown-item" data-value="3 Bulan">3 Bulan</div>
-      <div class="dropdown-item" data-value="1 Tahun">1 Tahun</div>
-    </div>
-  </div>
+<!-- Durasi -->
+<div class="dropdown-card" onclick="toggleDropdown('durasi')">
+  <span class="placeholder">Pilih Durasi</span>
+  <span class="chevron">›</span>
+</div>
+<div class="dropdown-options" id="options-durasi">
+  <div onclick="selectOption('durasi','1')">1 Bulan</div>
+  <div onclick="selectOption('durasi','3')">3 Bulan</div>
+  <div onclick="selectOption('durasi','12')">12 Bulan</div>
+</div>
 
-  <div class="group dropdown" data-name="payment">
-    <label>Metode Pembayaran</label>
-    <div class="dropdown-btn"><span>Pilih Metode</span>⌄</div>
-    <div class="dropdown-list">
-      <div class="dropdown-item" data-value="Dana">Dana</div>
-      <div class="dropdown-item" data-value="OVO">OVO</div>
-      <div class="dropdown-item" data-value="GoPay">GoPay</div>
-      <div class="dropdown-item" data-value="Transfer Bank">Transfer Bank</div>
-    </div>
-  </div>
+<!-- Payment -->
+<div class="dropdown-card" onclick="toggleDropdown('payment')">
+  <span class="placeholder">Pilih Metode</span>
+  <span class="chevron">›</span>
+</div>
+<div class="dropdown-options" id="options-payment">
+  <div onclick="selectOption('payment','gopay')">GoPay</div>
+  <div onclick="selectOption('payment','dana')">DANA</div>
+  <div onclick="selectOption('payment','qris')">QRIS</div>
+</div>
 
-  <div class="total" id="totalBox">
-    Total: <span id="harga">Rp 0</span>
-  </div>
+<div id="paymentInfo" class="payment-box hidden"></div>
+<div id="harga" class="total">Rp 0</div>
+<div id="error" class="error hidden">Lengkapi semua data terlebih dahulu</div>
 
-  <button id="btnWA" onclick="kirimWA()">
-    <span id="btnText">Kirim ke WhatsApp</span>
-  </button>
+<button id="btnBeli" class="beli" onclick="beli()">Beli Sekarang</button>
+<div id="timer" class="timer hidden"></div>
+
+<div id="afterBuy" class="hidden fade">
+  <input type="file" accept="image/*">
+  <button class="wa" onclick="kirimWA()">Kirim ke WhatsApp</button>
+</div>
 </div>
 
 <script>
-const hargaProduk={
-  "Premium User":{"1 Bulan":15000,"3 Bulan":40000,"1 Tahun":120000},
-  "Sewabot Grup":{"1 Bulan":20000,"3 Bulan":55000,"1 Tahun":150000}
-};
+let produk="", durasi=0, payment="";
+const hargaProduk={Premium:{1:15000,3:40000,12:120000},Sewabot:{1:25000,3:70000,12:200000}};
 
-let data={produk:"",durasi:"",payment:""};
-let currentTotal=0;
+function toggleDropdown(type){
+  const options = document.getElementById(`options-${type}`);
+  const chevron = document.querySelector(`#options-${type}`).previousElementSibling.querySelector('.chevron');
+  options.classList.toggle('show');
+  chevron.classList.toggle('open');
+}
 
-document.querySelectorAll(".dropdown").forEach(dd=>{
-  const btn=dd.querySelector(".dropdown-btn");
-  const span=btn.querySelector("span");
+function selectOption(type,value){
+  const dropdown = document.getElementById(`options-${type}`).previousElementSibling;
+  dropdown.querySelector('span').innerText = value;
+  document.querySelectorAll(`#options-${type} div`).forEach(d=>d.classList.remove('selected'));
+  event.target.classList.add('selected');
 
-  btn.onclick=()=>dd.classList.toggle("open");
-  dd.querySelectorAll(".dropdown-item").forEach(item=>{
-    item.onclick=()=>{
-      span.innerText=item.innerText;
-      data[dd.dataset.name]=item.dataset.value;
-      dd.classList.remove("open");
-      updateHarga();
-    };
-  });
-});
-
-function animateTotal(target){
-  const el=harga;
-  const box=totalBox;
-  let start=currentTotal,startTime=null;
-  box.classList.remove("animate");void box.offsetWidth;box.classList.add("animate");
-
-  function step(t){
-    if(!startTime) startTime=t;
-    const p=Math.min((t-startTime)/450,1);
-    const v=Math.floor(start+(target-start)*p);
-    el.innerText="Rp "+v.toLocaleString("id-ID");
-    if(p<1) requestAnimationFrame(step);
-    else currentTotal=target;
-  }
-  requestAnimationFrame(step);
+  if(type==="produk") produk=value;
+  if(type==="durasi") durasi=parseInt(value);
+  if(type==="payment") payment=value;
+  if(type==="payment") updatePaymentInfo();
+  updateHarga();
+  toggleDropdown(type);
 }
 
 function updateHarga(){
-  if(data.produk&&data.durasi){
-    animateTotal(hargaProduk[data.produk][data.durasi]);
-  }else animateTotal(0);
+  if(produk && durasi){
+    harga.innerText="Rp "+hargaProduk[produk][durasi].toLocaleString("id-ID");
+  }
+}
+
+function updatePaymentInfo(){
+  paymentInfo.classList.remove("hidden");
+  if(payment==="gopay") paymentInfo.innerHTML="GoPay<br><b>0812-XXXX-XXXX</b>";
+  else if(payment==="dana") paymentInfo.innerHTML="DANA<br><b>0853-XXXX-XXXX</b>";
+  else if(payment==="qris") paymentInfo.innerHTML=`QRIS<br><img src="https://i.imgur.com/8QfQG7Q.png">`;
+}
+
+function beli(){
+  error.classList.add("hidden");
+  if(!nama.value||!produk||!durasi||!payment){
+    error.classList.remove("hidden");
+    return;
+  }
+  btnBeli.classList.add("hidden");
+  let waktu=60;
+  timer.classList.remove("hidden");
+  const i=setInterval(()=>{
+    timer.innerText=`Sisa waktu pembayaran: 00:${String(waktu).padStart(2,"0")}`;
+    if(waktu===0){
+      clearInterval(i);
+      timer.classList.add("hidden");
+      afterBuy.classList.remove("hidden");
+      return;
+    }
+    waktu--;
+  },1000);
 }
 
 function kirimWA(){
-  if(!nama.value||!data.produk||!data.durasi||!data.payment){
-    alert("Lengkapi semua data");
-    return;
-  }
-
-  const btn=document.getElementById("btnWA");
-  btn.classList.add("loading");
-  btn.innerHTML=`<div class="spinner"></div> Menghubungkan WhatsApp...`;
-
-  const pesan=`📦 *ORDER BARU*
-👤 Nama: ${nama.value}
-📦 Produk: ${data.produk}
-⏳ Durasi: ${data.durasi}
-💳 Pembayaran: ${data.payment}
-💰 Total: ${harga.innerText}`;
-
-  setTimeout(()=>{
-    window.open("https://wa.me/6281274717032?text="+encodeURIComponent(pesan),"_blank");
-    btn.classList.remove("loading");
-    btn.innerHTML=`<span id="btnText">Kirim ke WhatsApp</span>`;
-  },1000);
+  const pesan=`Halo Admin,
+Nama: ${nama.value}
+Produk: ${produk}
+Durasi: ${durasi} Bulan
+Payment: ${payment}
+Total: ${harga.innerText}`;
+  window.open("https://wa.me/6281274717032?text="+encodeURIComponent(pesan), "_blank");
 }
 </script>
 
