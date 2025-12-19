@@ -77,117 +77,38 @@ button.primary{
   cursor:pointer;
 }
 
-/* ===== STRUK MODERN ===== */
-.struk-wrap{
-  display:flex;
-  justify-content:center;
-  margin-top:25px;
-}
-
-/* OUTER FRAME */
+/* ===== STRUK ===== */
+.struk-wrap{display:flex;justify-content:center;margin-top:25px}
 .struk-frame{
   background:linear-gradient(135deg,#4f46e5,#6366f1);
-  padding:3px;
-  border-radius:20px;
+  padding:3px;border-radius:20px
 }
-
-/* INNER CARD */
 .struk{
-  width:360px;
-  background:#ffffff;
-  border-radius:18px;
-  padding:18px;
-  font-size:13px;
-  color:#111;
+  width:360px;background:#fff;border-radius:18px;
+  padding:18px;font-size:13px
 }
-
-/* Header */
-.struk-header{
-  text-align:center;
-  padding-bottom:12px;
-  border-bottom:1px solid #eee;
-}
-.struk-header h3{
-  margin:0;
-  font-size:17px;
-  font-weight:700;
-}
-.struk-header span{
-  font-size:12px;
-  color:#666;
-}
-
-/* Sections */
-.section{
-  margin-top:12px;
-}
-.section-title{
-  font-size:11px;
-  font-weight:600;
-  color:#6b7280;
-  margin-bottom:6px;
-  text-transform:uppercase;
-}
-
-.info{
-  font-size:12px;
-  line-height:1.6;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  margin:6px 0;
-}
-
-.items .row{
-  font-size:13px;
-}
-
-/* Total Box */
+.struk-header{text-align:center;border-bottom:1px solid #eee;padding-bottom:10px}
+.struk-header h3{margin:0;font-size:17px}
+.struk-header span{font-size:12px;color:#666}
+.section{margin-top:12px}
+.section-title{font-size:11px;color:#6b7280;font-weight:600;text-transform:uppercase}
+.row{display:flex;justify-content:space-between;margin:6px 0}
 .total-box{
-  background:#f8fafc;
-  padding:12px;
-  border-radius:14px;
-  margin-top:10px;
+  background:#f8fafc;padding:12px;border-radius:14px;margin-top:10px
 }
-.total-box .row{
-  font-weight:600;
-}
-.total-box .grand{
-  font-size:15px;
-  font-weight:700;
-}
-
-/* Footer */
-.footer{
-  text-align:center;
-  font-size:12px;
-  margin-top:14px;
-  color:#555;
-}
+.total-box .grand{font-size:15px;font-weight:700}
+.footer{text-align:center;margin-top:14px;font-size:12px;color:#555}
 
 /* Actions */
-.actions{
-  display:grid;
-  grid-template-columns:1fr 1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
 .actions button{
-  padding:10px;
-  border:none;
-  border-radius:10px;
-  color:#fff;
-  cursor:pointer;
+  padding:10px;border:none;border-radius:10px;color:#fff;cursor:pointer
 }
 .download{background:#2563eb}
 .share{background:#22c55e}
 .print{background:#6b7280}
 
-@media(max-width:900px){
-  .container{grid-template-columns:1fr}
-}
+@media(max-width:900px){.container{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -195,9 +116,8 @@ button.primary{
 
 <div class="container">
 
-<!-- PRODUK -->
 <div class="card">
-<h2>🛒 Daftar Produk</h2>
+<h2>🛒 Produk</h2>
 
 <div class="product">
 <span>Premium User</span>
@@ -217,24 +137,15 @@ button.primary{
 </div>
 </div>
 
-<div class="product">
-<span>Sewa Bot VVIP</span>
-<div class="qty">
-<button onclick="ubahQty('Sewa Bot VVIP',50000,-1)">-</button>
-<span id="qSewa Bot VVIP">0</span>
-<button onclick="ubahQty('Sewa Bot VVIP',50000,1)">+</button>
-</div>
-</div>
 </div>
 
-<!-- KASIR -->
 <div class="card">
 <h2>🧾 Kasir</h2>
 
 <label>Nama Pembeli</label>
 <input id="nama">
 
-<label>Nomor WhatsApp</label>
+<label>No WhatsApp</label>
 <input id="hp">
 
 <label>Metode Pembayaran</label>
@@ -259,8 +170,7 @@ button.primary{
 
 <script>
 let cart={}, total=0;
-
-const rupiah = n => n.toLocaleString("id-ID");
+const rupiah=n=>n.toLocaleString("id-ID");
 
 function generateID(){
   return "TRX-"+Date.now().toString().slice(-8);
@@ -272,8 +182,7 @@ function waktu(){
 
 function ubahQty(nama,harga,step){
   if(!cart[nama]) cart[nama]={harga,qty:0};
-  cart[nama].qty+=step;
-  if(cart[nama].qty<0) cart[nama].qty=0;
+  cart[nama].qty=Math.max(0,cart[nama].qty+step);
   document.getElementById("q"+nama).innerText=cart[nama].qty;
   renderCart();
 }
@@ -283,7 +192,7 @@ function renderCart(){
   c.innerHTML=""; total=0;
   Object.keys(cart).forEach(n=>{
     const i=cart[n];
-    if(i.qty>0){
+    if(i.qty){
       total+=i.harga*i.qty;
       c.innerHTML+=`
         <div class="cart-item">
@@ -296,18 +205,18 @@ function renderCart(){
 }
 
 function buatStruk(){
-  const nama=namaInput=nama.value||"-";
-  const hpVal=hp.value||"-";
-  const metode=metodeInput=metode.value;
-  const bayar=Number(document.getElementById("bayar").value);
+  const namaVal=document.getElementById("nama").value||"-";
+  const hpVal=document.getElementById("hp").value||"-";
+  const metodeVal=document.getElementById("metode").value;
+  const bayarVal=Number(document.getElementById("bayar").value);
 
-  if(total===0) return alert("Belum ada produk");
-  if(bayar<total) return alert("Uang kurang");
+  if(!total) return alert("Belum ada produk");
+  if(bayarVal<total) return alert("Uang kurang");
 
   let items="";
   Object.keys(cart).forEach(n=>{
     const i=cart[n];
-    if(i.qty>0){
+    if(i.qty){
       items+=`
         <div class="row">
           <span>${n} x${i.qty}</span>
@@ -328,34 +237,28 @@ function buatStruk(){
 
         <div class="section">
           <div class="section-title">Transaksi</div>
-          <div class="info">
-            ID : ${generateID()}<br>
-            Waktu : ${waktu()}
-          </div>
+          ID: ${generateID()}<br>Waktu: ${waktu()}
         </div>
 
         <div class="section">
           <div class="section-title">Pembeli</div>
-          <div class="info">
-            Nama : ${nama}<br>
-            No HP : ${hpVal}
-          </div>
+          Nama: ${namaVal}<br>No HP: ${hpVal}
         </div>
 
         <div class="section">
           <div class="section-title">Item</div>
-          <div class="items">${items}</div>
+          ${items}
         </div>
 
         <div class="total-box">
           <div class="row"><span>Total</span><span>Rp${rupiah(total)}</span></div>
-          <div class="row"><span>Bayar</span><span>Rp${rupiah(bayar)}</span></div>
-          <div class="row grand"><span>Kembali</span><span>Rp${rupiah(bayar-total)}</span></div>
+          <div class="row"><span>Bayar</span><span>Rp${rupiah(bayarVal)}</span></div>
+          <div class="row grand"><span>Kembali</span><span>Rp${rupiah(bayarVal-total)}</span></div>
         </div>
 
         <div class="section">
           <div class="section-title">Metode Pembayaran</div>
-          <div class="info"><b>${metode}</b></div>
+          <b>${metodeVal}</b>
         </div>
 
         <div class="footer">Terima kasih telah berbelanja 🙏</div>
@@ -372,8 +275,8 @@ function buatStruk(){
 }
 
 function downloadStruk(){
-  const el=document.getElementById("struk");
-  html2canvas(el,{scale:2}).then(c=>{
+  html2canvas(document.getElementById("struk"),{scale:2})
+  .then(c=>{
     const a=document.createElement("a");
     a.href=c.toDataURL("image/png");
     a.download="struk.png";
@@ -381,20 +284,16 @@ function downloadStruk(){
   });
 }
 
-async function shareStruk(){
-  const el=document.getElementById("struk");
-  html2canvas(el,{scale:2}).then(c=>{
-    c.toBlob(async b=>{
-      const file=new File([b],"struk.png",{type:"image/png"});
-      if(navigator.canShare && navigator.canShare({files:[file]})){
-        await navigator.share({files:[file]});
-      }else{
-        alert("Browser tidak mendukung share gambar");
-      }
-    });
-  });
+function shareStruk(){
+  html2canvas(document.getElementById("struk"),{scale:2})
+  .then(c=>c.toBlob(async b=>{
+    const file=new File([b],"struk.png",{type:"image/png"});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file]});
+    }else alert("Browser tidak support share gambar");
+  }));
 }
 </script>
 
 </body>
-  </html>
+</html>
