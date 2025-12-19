@@ -294,11 +294,16 @@ function kirimWA(){
   const namaInput=document.getElementById("nama");
   const totalPayment=document.getElementById("totalPayment").innerText;
   const pesan=`Halo Admin,
+  
 Nama: ${namaInput.value}
+
 Produk: ${produk}
+
 Durasi: ${durasi} Hari
+
 Payment: ${payment}
-${totalPayment}`;
+${totalPayment}
+Aku sudah bayar min, tolong proses ya;
   window.open("https://wa.me/6289654951306?text="+encodeURIComponent(pesan), "_blank");
 }
 
