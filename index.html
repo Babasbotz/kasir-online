@@ -3,222 +3,287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pembayaran Inline Dropdown</title>
+<title>Pembayaran Shina - Ai</title>
 <style>
-*{box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui;margin:0;padding:0;}
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:linear-gradient(135deg,#0f172a,#1e293b);
-  color:#fff;
-}
-.card{
-  width:100%;
-  max-width:420px;
-  padding:28px;
-  border-radius:32px;
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(25px);
-  box-shadow:0 30px 80px rgba(0,0,0,.6);
-}
-h2{text-align:center;margin-bottom:24px;font-weight:700;font-size:24px;}
+*{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui;}
+html,body{height:100%;background:#0f172a;display:flex;flex-direction:column;align-items:center;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:40px 0;color:#fff;}
+body{transition:all .3s;}
 
-.input-group{margin-bottom:18px;}
-.input-group label{display:block;font-size:13px;opacity:.8;margin-bottom:6px;}
+/* Card utama */
+.card{width:100%;max-width:420px;background:rgba(20,25,45,0.95);backdrop-filter:blur(25px);border-radius:32px;padding:30px;box-shadow:0 20px 40px rgba(0,0,0,0.7);display:flex;flex-direction:column;align-items:center;transition:all .3s;}
+h2{text-align:center;margin-bottom:24px;font-weight:700;font-size:24px;color:#f1f5f9;}
+.input-group{margin-bottom:18px;width:100%;}
+.input-group label{font-size:13px;opacity:.8;margin-bottom:6px;display:block;color:#cbd5e1;}
+
+/* Input dengan border */
 .input-group input{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:18px;
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  font-size:14px;
+  width:100%;padding:16px;border:1px solid rgba(255,255,255,.3);border-radius:18px;background:#1e293b;color:#fff;font-size:14px;transition:all .3s;
+}
+.input-group input:focus{
+  background:#273449;outline:none;border:1px solid #60a5fa;
 }
 
-/* dropdown inline card */
-.dropdown-card{
-  width:100%;
-  padding:16px;
-  border-radius:18px;
-  background:rgba(255,255,255,.15);
-  color:#fff;
-  font-size:14px;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:8px;
-  position:relative;
-  user-select:none;
+/* Dropdown solid style */
+.dropdown-container{width:100%;margin-bottom:16px;position:relative;}
+.dropdown-container label{display:block;font-size:13px;color:#cbd5e1;margin-bottom:6px;}
+.dropdown-display{
+  width:100%;padding:16px;border-radius:18px;background:#1e293b;
+  display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  transition:all .3s;color:#fff;border:1px solid rgba(255,255,255,.3);
 }
-.dropdown-card span.placeholder{opacity:.7;}
-.chevron{transition:.3s;transform:rotate(0deg);}
-.chevron.open{transform:rotate(90deg);}
-
-/* dropdown options inline */
+.dropdown-display:hover{background:#273449;}
+.dropdown-display span.placeholder{opacity:.7;}
+.dropdown-display .arrow{transition:all .3s;display:inline-block;}
 .dropdown-options{
-  position:relative;
-  background:rgba(255,255,255,.12);
-  border-radius:16px;
-  margin-bottom:16px;
-  overflow:hidden;
-  max-height:0;
-  transition:max-height .3s ease;
+  position:absolute;top:calc(100% + 6px);left:0;width:100%;background:#1e293b;
+  border-radius:16px;overflow:hidden;max-height:0;opacity:0;transform:translateY(-10px);transition:max-height .3s ease,opacity .3s ease,transform .3s ease;
+  z-index:10;color:#fff;box-shadow:0 8px 16px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);
 }
-.dropdown-options.show{max-height:300px;}
-.dropdown-options div{
-  padding:14px;
-  text-align:center;
-  cursor:pointer;
-  transition:.2s;
-}
-.dropdown-options div:hover{background:rgba(255,255,255,.2);}
+.dropdown-options.show{max-height:300px;opacity:1;transform:translateY(0);}
+.dropdown-options div{padding:14px;text-align:center;cursor:pointer;transition:.2s;border-bottom:1px solid rgba(255,255,255,.1);}
+.dropdown-options div:last-child{border-bottom:none;}
+.dropdown-options div:hover{background:#334155;}
 .dropdown-options div.selected{color:#60a5fa;font-weight:600;}
 
-/* harga */
-.total{text-align:center;font-size:26px;font-weight:700;margin:20px 0;}
-.payment-box{
-  background:rgba(255,255,255,.12);
-  border-radius:18px;
-  padding:14px;
-  text-align:center;
-  margin-bottom:18px;
-}
-.payment-box img{width:160px;border-radius:14px;margin-top:10px;}
+/* Notes */
+.note{font-size:13px;color:#facc15;margin:10px 0;text-align:center;opacity:0;transform:translateY(10px);transition:all .5s ease;}
+.note.show{opacity:1;transform:translateY(0);}
 
-/* buttons */
-button{
-  width:100%;
-  padding:18px;
-  border:none;
-  border-radius:24px;
-  font-size:16px;
-  font-weight:600;
-  color:#fff;
-  cursor:pointer;
-  transition:.3s;
-}
+/* Total pembayaran */
+.total-card{background:#273449;padding:12px 20px;border-radius:16px;font-size:18px;font-weight:500;margin:15px 0;backdrop-filter:blur(10px);text-align:center;color:#fff;transition:all .3s;}
+
+/* Buttons */
+button{width:100%;padding:16px;border:none;border-radius:24px;font-size:16px;font-weight:600;color:#fff;cursor:pointer;transition:.3s;opacity:0;transform:translateY(20px);}
+button.show{opacity:1;transform:translateY(0);}
 button:hover{transform:scale(1.02);}
-.beli{background:linear-gradient(135deg,#3b82f6,#2563eb);box-shadow:0 8px 20px rgba(59,130,246,.5);}
-.wa{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 8px 20px rgba(34,197,94,.5);}
+.beli{background:linear-gradient(135deg,#1e40af,#3b82f6);box-shadow:0 8px 20px rgba(59,130,246,.5);}
+.wa{background:linear-gradient(135deg,#16a34a,#22c55e);box-shadow:0 8px 20px rgba(34,197,94,.5);}
 
+/* Timer & error */
 .timer{text-align:center;margin-top:14px;font-size:14px;opacity:.8;}
-.error{text-align:center;font-size:13px;color:#fca5a5;margin-bottom:12px;}
+.error{text-align:center;font-size:13px;color:#f87171;margin-bottom:12px;}
 .hidden{display:none;}
-.fade{animation:fade .4s ease;}
-@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+/* Tabel harga */
+.table-container{width:100%;max-width:420px;margin-top:30px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;color:#fff;}
+thead{background:#1e293b;}
+thead th{padding:12px;font-size:14px;text-align:center;border-bottom:1px solid rgba(255,255,255,.2);}
+tbody tr{border-bottom:1px solid rgba(255,255,255,.2);}
+tbody td{padding:10px;font-size:14px;text-align:center;}
+
+/* Footer */
+footer{width:100%;max-width:420px;text-align:center;color:rgba(255,255,255,.5);font-size:13px;margin-top:20px;}
 </style>
 </head>
 <body>
 
 <div class="card">
-<h2>💳 Pembayaran Modern</h2>
+<h2>💳 Pembayaran Shina - Ai 💳</h2>
 
 <div class="input-group">
 <label>Nama</label>
 <input id="nama" placeholder="Isi nama">
 </div>
 
-<!-- Produk -->
-<div class="dropdown-card" onclick="toggleDropdown('produk')">
+<!-- Dropdown Produk -->
+<div class="dropdown-container">
+<label>Produk</label>
+<div class="dropdown-display" onclick="toggleDropdown('produk')">
   <span class="placeholder">Pilih Produk</span>
-  <span class="chevron">›</span>
+  <span class="arrow">▼</span>
 </div>
 <div class="dropdown-options" id="options-produk">
-  <div onclick="selectOption('produk','Premium')">Premium</div>
-  <div onclick="selectOption('produk','Sewabot')">Sewabot</div>
+  <div onclick="selectOption('produk','Premium User')">Premium User</div>
+  <div onclick="selectOption('produk','Sewabot Basic')">Sewabot Basic</div>
+  <div onclick="selectOption('produk','Sewabot Plus')">Sewabot Plus</div>
+  <div onclick="selectOption('produk','Sewabot VVIP')">Sewabot VVIP</div>
+</div>
 </div>
 
-<!-- Durasi -->
-<div class="dropdown-card" onclick="toggleDropdown('durasi')">
+<!-- Dropdown Durasi -->
+<div class="dropdown-container">
+<label>Durasi</label>
+<div class="dropdown-display" onclick="toggleDropdown('durasi')">
   <span class="placeholder">Pilih Durasi</span>
-  <span class="chevron">›</span>
+  <span class="arrow">▼</span>
 </div>
 <div class="dropdown-options" id="options-durasi">
-  <div onclick="selectOption('durasi','1')">1 Bulan</div>
-  <div onclick="selectOption('durasi','3')">3 Bulan</div>
-  <div onclick="selectOption('durasi','12')">12 Bulan</div>
+  <div onclick="selectOption('durasi','15')">15 Hari</div>
+  <div onclick="selectOption('durasi','30')">1 Bulan</div>
+  <div onclick="selectOption('durasi','60')">2 Bulan</div>
+  <div onclick="selectOption('durasi','90')">3 Bulan</div>
+  <div onclick="selectOption('durasi','150')">5 Bulan</div>
+  <div onclick="selectOption('durasi','365')">1 Tahun</div>
+</div>
 </div>
 
-<!-- Payment -->
-<div class="dropdown-card" onclick="toggleDropdown('payment')">
+<!-- Dropdown Payment -->
+<div class="dropdown-container">
+<label>Payment</label>
+<div class="dropdown-display" onclick="toggleDropdown('payment')">
   <span class="placeholder">Pilih Metode</span>
-  <span class="chevron">›</span>
+  <span class="arrow">▼</span>
 </div>
 <div class="dropdown-options" id="options-payment">
   <div onclick="selectOption('payment','gopay')">GoPay</div>
   <div onclick="selectOption('payment','dana')">DANA</div>
   <div onclick="selectOption('payment','qris')">QRIS</div>
 </div>
+</div>
 
+<div id="noteQris" class="note">Silahkan download QRIS ini lalu masuk ke aplikasi payment anda</div>
 <div id="paymentInfo" class="payment-box hidden"></div>
-<div id="harga" class="total">Rp 0</div>
+<div class="total-card" id="totalPayment">Total: Rp 0</div>
 <div id="error" class="error hidden">Lengkapi semua data terlebih dahulu</div>
 
 <button id="btnBeli" class="beli" onclick="beli()">Beli Sekarang</button>
 <div id="timer" class="timer hidden"></div>
 
-<div id="afterBuy" class="hidden fade">
-  <input type="file" accept="image/*">
-  <button class="wa" onclick="kirimWA()">Kirim ke WhatsApp</button>
+<div id="afterBuy" style="width:100%;margin-top:12px;">
+  <div id="noteBukti" class="note">Silahkan kirim bukti pembayaran anda melalui WhatsApp di bawah ini</div>
+  <button id="btnWA" class="wa" onclick="kirimWA()">Kirim ke WhatsApp</button>
 </div>
+
 </div>
+
+<!-- Tabel Harga Produk -->
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Produk</th>
+<th>Durasi</th>
+<th>Harga / Bonus</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Premium User</td><td>15 Hari</td><td>Rp 10.000</td></tr>
+<tr><td>Premium User</td><td>1 Bulan</td><td>Rp 15.000 + Bonus 1JT Balance</td></tr>
+<tr><td>Premium User</td><td>2 Bulan</td><td>Rp 25.000 + Bonus 3JT Balance</td></tr>
+<tr><td>Premium User</td><td>3 Bulan</td><td>Rp 35.000 + Bonus 5JT Balance</td></tr>
+<tr><td>Premium User</td><td>5 Bulan</td><td>Rp 50.000 + Bonus 7JT Balance</td></tr>
+<tr><td>Premium User</td><td>1 Tahun</td><td>Rp 120.000 + Bonus 20JT Balance</td></tr>
+
+<tr><td>Sewabot Basic</td><td>15 Hari</td><td>Rp 10.000</td></tr>
+<tr><td>Sewabot Basic</td><td>1 Bulan</td><td>Rp 15.000</td></tr>
+<tr><td>Sewabot Basic</td><td>2 Bulan</td><td>Rp 30.000</td></tr>
+<tr><td>Sewabot Basic</td><td>3 Bulan</td><td>Rp 45.000</td></tr>
+<tr><td>Sewabot Basic</td><td>5 Bulan</td><td>Rp 75.000</td></tr>
+<tr><td>Sewabot Basic</td><td>1 Tahun</td><td>Rp 180.000</td></tr>
+
+<tr><td>Sewabot Plus</td><td>15 Hari</td><td>Rp 15.000</td></tr>
+<tr><td>Sewabot Plus</td><td>1 Bulan</td><td>Rp 25.000</td></tr>
+<tr><td>Sewabot Plus</td><td>2 Bulan</td><td>Rp 50.000</td></tr>
+<tr><td>Sewabot Plus</td><td>3 Bulan</td><td>Rp 75.000</td></tr>
+<tr><td>Sewabot Plus</td><td>5 Bulan</td><td>Rp 125.000</td></tr>
+<tr><td>Sewabot Plus</td><td>1 Tahun</td><td>Rp 300.000</td></tr>
+
+<tr><td>Sewabot VVIP</td><td>15 Hari</td><td>Rp 20.000</td></tr>
+<tr><td>Sewabot VVIP</td><td>1 Bulan</td><td>Rp 35.000</td></tr>
+<tr><td>Sewabot VVIP</td><td>2 Bulan</td><td>Rp 70.000</td></tr>
+<tr><td>Sewabot VVIP</td><td>3 Bulan</td><td>Rp 105.000</td></tr>
+<tr><td>Sewabot VVIP</td><td>5 Bulan</td><td>Rp 175.000</td></tr>
+<tr><td>Sewabot VVIP</td><td>1 Tahun</td><td>Rp 420.000</td></tr>
+</tbody>
+</table>
+</div>
+
+<footer>© Babas</footer>
 
 <script>
 let produk="", durasi=0, payment="";
-const hargaProduk={Premium:{1:15000,3:40000,12:120000},Sewabot:{1:25000,3:70000,12:200000}};
+const hargaProduk={
+"Premium User":{15:10000,30:15000,60:25000,90:35000,150:50000,365:120000},
+"Sewabot Basic":{15:10000,30:15000,60:30000,90:45000,150:75000,365:180000},
+"Sewabot Plus":{15:15000,30:25000,60:50000,90:75000,150:125000,365:300000},
+"Sewabot VVIP":{15:20000,30:35000,60:70000,90:105000,150:175000,365:420000}
+};
 
 function toggleDropdown(type){
-  const options = document.getElementById(`options-${type}`);
-  const chevron = document.querySelector(`#options-${type}`).previousElementSibling.querySelector('.chevron');
+  const options=document.getElementById(`options-${type}`);
+  const display=document.getElementById(`options-${type}`).previousElementSibling;
+  const arrow=display.querySelector(".arrow");
+  const allDropdowns=document.querySelectorAll('.dropdown-options');
+  const allArrows=document.querySelectorAll('.dropdown-display .arrow');
+  allDropdowns.forEach(d=>{if(d!==options)d.classList.remove('show');});
+  allArrows.forEach(a=>{if(a!==arrow)a.style.transform="rotate(0deg)";});
   options.classList.toggle('show');
-  chevron.classList.toggle('open');
+  arrow.style.transform = options.classList.contains('show') ? "rotate(180deg)" : "rotate(0deg)";
 }
 
 function selectOption(type,value){
-  const dropdown = document.getElementById(`options-${type}`).previousElementSibling;
-  dropdown.querySelector('span').innerText = value;
+  const dropdown=document.getElementById(`options-${type}`).previousElementSibling;
+  dropdown.querySelector('span').innerText=value;
   document.querySelectorAll(`#options-${type} div`).forEach(d=>d.classList.remove('selected'));
   event.target.classList.add('selected');
 
   if(type==="produk") produk=value;
   if(type==="durasi") durasi=parseInt(value);
   if(type==="payment") payment=value;
+
+  const noteQris=document.getElementById("noteQris");
+  noteQris.classList.remove("show");
+  if(type==="payment" && value==="qris") noteQris.classList.add("show");
+
+  animateTotal();
   if(type==="payment") updatePaymentInfo();
-  updateHarga();
   toggleDropdown(type);
 }
 
-function updateHarga(){
-  if(produk && durasi){
-    harga.innerText="Rp "+hargaProduk[produk][durasi].toLocaleString("id-ID");
-  }
+// Animasi total pembayaran
+function animateTotal(){
+  if(!produk || !durasi) return;
+  const totalEl=document.getElementById("totalPayment");
+  const total=hargaProduk[produk][durasi];
+  let start=0;
+  const duration=600; // 0.6 detik
+  const stepTime=16;
+  const increment=total/duration*stepTime;
+  const anim=setInterval(()=>{
+    start+=increment;
+    if(start>=total){
+      start=total;
+      clearInterval(anim);
+    }
+    totalEl.innerText="Total: Rp "+Math.round(start).toLocaleString("id-ID");
+  },stepTime);
 }
 
 function updatePaymentInfo(){
+  const paymentInfo=document.getElementById("paymentInfo");
   paymentInfo.classList.remove("hidden");
-  if(payment==="gopay") paymentInfo.innerHTML="GoPay<br><b>0812-XXXX-XXXX</b>";
-  else if(payment==="dana") paymentInfo.innerHTML="DANA<br><b>0853-XXXX-XXXX</b>";
-  else if(payment==="qris") paymentInfo.innerHTML=`QRIS<br><img src="https://i.imgur.com/8QfQG7Q.png">`;
+  if(payment==="gopay") paymentInfo.innerHTML='<div style="text-align:center;">GoPay<br><b>0898-8189-120</b></div>';
+  else if(payment==="dana") paymentInfo.innerHTML='<div style="text-align:center;">DANA<br><b>0898-8189-120</b></div>';
+  else if(payment==="qris") paymentInfo.innerHTML=`<div style="text-align:center;">QRIS<br><img src="https://i.ibb.co.com/XZMcFrSk/image-8c47b4bf-5822-484c-a6c0-93560ceca2a0.png" style="width:140px;border-radius:12px;"></div>`;
 }
 
 function beli(){
+  const namaInput=document.getElementById("nama");
+  const error=document.getElementById("error");
+  const btnBeli=document.getElementById("btnBeli");
+  const timer=document.getElementById("timer");
+  const noteBukti=document.getElementById("noteBukti");
+  const btnWA=document.getElementById("btnWA");
+
   error.classList.add("hidden");
-  if(!nama.value||!produk||!durasi||!payment){
+  if(!namaInput.value||!produk||!durasi||!payment){
     error.classList.remove("hidden");
     return;
   }
+
+  btnBeli.classList.remove("show"); btnBeli.style.opacity=0;
   btnBeli.classList.add("hidden");
-  let waktu=60;
   timer.classList.remove("hidden");
+
+  let waktu=60;
   const i=setInterval(()=>{
     timer.innerText=`Sisa waktu pembayaran: 00:${String(waktu).padStart(2,"0")}`;
     if(waktu===0){
       clearInterval(i);
       timer.classList.add("hidden");
-      afterBuy.classList.remove("hidden");
+      noteBukti.classList.add("show");
+      btnWA.classList.add("show");
       return;
     }
     waktu--;
@@ -226,15 +291,19 @@ function beli(){
 }
 
 function kirimWA(){
+  const namaInput=document.getElementById("nama");
+  const totalPayment=document.getElementById("totalPayment").innerText;
   const pesan=`Halo Admin,
-Nama: ${nama.value}
+Nama: ${namaInput.value}
 Produk: ${produk}
-Durasi: ${durasi} Bulan
+Durasi: ${durasi} Hari
 Payment: ${payment}
-Total: ${harga.innerText}`;
-  window.open("https://wa.me/6281274717032?text="+encodeURIComponent(pesan), "_blank");
+${totalPayment}`;
+  window.open("https://wa.me/628XXXXXXXXX?text="+encodeURIComponent(pesan), "_blank");
 }
+
+window.onload=function(){document.getElementById("btnBeli").classList.add("show");};
 </script>
 
 </body>
-</html>
+  </html>
