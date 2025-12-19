@@ -5,215 +5,296 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Payment Order</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --primary:#6366f1;
-  --bg:#0f172a;
-  --card:#020617cc;
-  --border:rgba(255,255,255,.1);
+  --accent:#22d3ee;
+  --bg:#020617;
+  --card:rgba(2,6,23,.78);
+  --border:rgba(255,255,255,.12);
   --text:#e5e7eb;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:'Inter',sans-serif;
-}
+*{box-sizing:border-box;font-family:'Inter',sans-serif;}
 
 body{
   margin:0;
   min-height:100vh;
   display:flex;
-  align-items:center;
   justify-content:center;
-  background:linear-gradient(135deg,#0f172a,#020617);
+  align-items:center;
+  background:radial-gradient(circle at top,#1e293b,#020617);
   color:var(--text);
+  overflow:hidden;
 }
 
+/* background */
+.blob{
+  position:absolute;
+  width:300px;
+  height:300px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  filter:blur(100px);
+  opacity:.35;
+  animation:float 12s infinite alternate;
+}
+.blob:nth-child(1){top:-80px;left:-80px;}
+.blob:nth-child(2){bottom:-100px;right:-100px;animation-delay:4s;}
+@keyframes float{to{transform:translateY(-40px) scale(1.1);}}
+
+/* card */
 .card{
   width:100%;
   max-width:420px;
   padding:28px;
-  border-radius:18px;
+  border-radius:22px;
   background:var(--card);
-  backdrop-filter:blur(14px);
+  backdrop-filter:blur(18px);
   border:1px solid var(--border);
-  box-shadow:0 25px 60px rgba(0,0,0,.4);
+  box-shadow:0 40px 80px rgba(0,0,0,.55);
+  z-index:1;
+  animation:cardIn .8s ease;
+}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(40px);}
 }
 
-h1{
-  margin:0 0 6px;
-  font-size:22px;
-  text-align:center;
-}
-
+h1{text-align:center;margin:0;}
 .subtitle{
   text-align:center;
   font-size:13px;
   opacity:.7;
-  margin-bottom:22px;
+  margin:6px 0 24px;
 }
 
-.form-group{
-  margin-bottom:14px;
-}
+.group{margin-bottom:14px;}
+label{font-size:13px;opacity:.85;display:block;margin-bottom:6px;}
 
-label{
-  font-size:13px;
-  display:block;
-  margin-bottom:6px;
-  opacity:.85;
-}
-
-input,select{
+input{
   width:100%;
-  padding:12px 14px;
-  border-radius:12px;
+  padding:13px 15px;
+  border-radius:14px;
   background:#020617;
   border:1px solid var(--border);
-  color:#fff;
+  color:white;
   outline:none;
 }
 
-input:focus,select:focus{
-  border-color:var(--primary);
+/* dropdown */
+.dropdown{position:relative;}
+.dropdown-btn{
+  padding:13px 15px;
+  border-radius:14px;
+  background:#020617;
+  border:1px solid var(--border);
+  cursor:pointer;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.dropdown-list{
+  position:absolute;
+  left:0;right:0;
+  top:110%;
+  background:#020617;
+  border:1px solid var(--border);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 20px 40px rgba(0,0,0,.6);
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:.35s;
+  z-index:10;
+}
+.dropdown.open .dropdown-list{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
+.dropdown-item{
+  padding:14px 16px;
+  cursor:pointer;
+}
+.dropdown-item:hover{
+  background:rgba(99,102,241,.15);
 }
 
+/* total */
 .total{
-  margin:18px 0;
-  padding:14px;
-  border-radius:12px;
+  margin:20px 0;
+  padding:18px;
+  border-radius:16px;
   background:#020617;
   border:1px dashed var(--primary);
   text-align:center;
-  font-weight:600;
+  font-weight:700;
+}
+.total.animate{
+  animation:pulse .6s ease;
+}
+@keyframes pulse{
+  50%{transform:scale(1.05);box-shadow:0 0 30px rgba(99,102,241,.55);}
 }
 
+/* button */
 button{
   width:100%;
-  padding:14px;
+  padding:15px;
   border:none;
-  border-radius:14px;
+  border-radius:16px;
   background:linear-gradient(135deg,#6366f1,#4f46e5);
   color:white;
   font-size:15px;
   font-weight:600;
   cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
   transition:.3s;
 }
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 12px 30px rgba(99,102,241,.45);
+button.loading{
+  pointer-events:none;
+  opacity:.85;
 }
+.spinner{
+  width:18px;
+  height:18px;
+  border:3px solid rgba(255,255,255,.3);
+  border-top:3px solid white;
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
+<div class="blob"></div>
+<div class="blob"></div>
+
 <div class="card">
   <h1>Payment Order</h1>
-  <div class="subtitle">Lengkapi data & kirim ke WhatsApp</div>
+  <div class="subtitle">Konfirmasi via WhatsApp</div>
 
-  <div class="form-group">
+  <div class="group">
     <label>Nama</label>
-    <input type="text" id="nama" placeholder="Nama kamu">
+    <input id="nama" placeholder="Nama kamu">
   </div>
 
-  <div class="form-group">
+  <div class="group dropdown" data-name="produk">
     <label>Produk</label>
-    <select id="produk" onchange="updateHarga()">
-      <option value="">-- Pilih Produk --</option>
-      <option value="Premium User">Premium User</option>
-      <option value="Sewabot Grup">Sewabot Grup</option>
-    </select>
+    <div class="dropdown-btn"><span>Pilih Produk</span>⌄</div>
+    <div class="dropdown-list">
+      <div class="dropdown-item" data-value="Premium User">Premium User</div>
+      <div class="dropdown-item" data-value="Sewabot Grup">Sewabot Grup</div>
+    </div>
   </div>
 
-  <div class="form-group">
+  <div class="group dropdown" data-name="durasi">
     <label>Durasi</label>
-    <select id="durasi" onchange="updateHarga()">
-      <option value="">-- Pilih Durasi --</option>
-      <option value="1 Bulan">1 Bulan</option>
-      <option value="3 Bulan">3 Bulan</option>
-      <option value="1 Tahun">1 Tahun</option>
-    </select>
+    <div class="dropdown-btn"><span>Pilih Durasi</span>⌄</div>
+    <div class="dropdown-list">
+      <div class="dropdown-item" data-value="1 Bulan">1 Bulan</div>
+      <div class="dropdown-item" data-value="3 Bulan">3 Bulan</div>
+      <div class="dropdown-item" data-value="1 Tahun">1 Tahun</div>
+    </div>
   </div>
 
-  <div class="form-group">
+  <div class="group dropdown" data-name="payment">
     <label>Metode Pembayaran</label>
-    <select id="payment">
-      <option value="">-- Pilih Metode --</option>
-      <option value="Dana">Dana</option>
-      <option value="OVO">OVO</option>
-      <option value="GoPay">GoPay</option>
-      <option value="Transfer Bank">Transfer Bank</option>
-    </select>
+    <div class="dropdown-btn"><span>Pilih Metode</span>⌄</div>
+    <div class="dropdown-list">
+      <div class="dropdown-item" data-value="Dana">Dana</div>
+      <div class="dropdown-item" data-value="OVO">OVO</div>
+      <div class="dropdown-item" data-value="GoPay">GoPay</div>
+      <div class="dropdown-item" data-value="Transfer Bank">Transfer Bank</div>
+    </div>
   </div>
 
-  <div class="total">
-    Total Harga: <span id="harga">Rp 0</span>
+  <div class="total" id="totalBox">
+    Total: <span id="harga">Rp 0</span>
   </div>
 
-  <button onclick="kirimWA()">Kirim ke WhatsApp</button>
+  <button id="btnWA" onclick="kirimWA()">
+    <span id="btnText">Kirim ke WhatsApp</span>
+  </button>
 </div>
 
 <script>
-const hargaProduk = {
-  "Premium User":{
-    "1 Bulan":15000,
-    "3 Bulan":40000,
-    "1 Tahun":120000
-  },
-  "Sewabot Grup":{
-    "1 Bulan":20000,
-    "3 Bulan":55000,
-    "1 Tahun":150000
-  }
+const hargaProduk={
+  "Premium User":{"1 Bulan":15000,"3 Bulan":40000,"1 Tahun":120000},
+  "Sewabot Grup":{"1 Bulan":20000,"3 Bulan":55000,"1 Tahun":150000}
 };
 
-function updateHarga(){
-  const produk = document.getElementById("produk").value;
-  const durasi = document.getElementById("durasi").value;
-  const hargaEl = document.getElementById("harga");
+let data={produk:"",durasi:"",payment:""};
+let currentTotal=0;
 
-  if(produk && durasi){
-    const harga = hargaProduk[produk][durasi];
-    hargaEl.innerText = "Rp " + harga.toLocaleString("id-ID");
-  }else{
-    hargaEl.innerText = "Rp 0";
+document.querySelectorAll(".dropdown").forEach(dd=>{
+  const btn=dd.querySelector(".dropdown-btn");
+  const span=btn.querySelector("span");
+
+  btn.onclick=()=>dd.classList.toggle("open");
+  dd.querySelectorAll(".dropdown-item").forEach(item=>{
+    item.onclick=()=>{
+      span.innerText=item.innerText;
+      data[dd.dataset.name]=item.dataset.value;
+      dd.classList.remove("open");
+      updateHarga();
+    };
+  });
+});
+
+function animateTotal(target){
+  const el=harga;
+  const box=totalBox;
+  let start=currentTotal,startTime=null;
+  box.classList.remove("animate");void box.offsetWidth;box.classList.add("animate");
+
+  function step(t){
+    if(!startTime) startTime=t;
+    const p=Math.min((t-startTime)/450,1);
+    const v=Math.floor(start+(target-start)*p);
+    el.innerText="Rp "+v.toLocaleString("id-ID");
+    if(p<1) requestAnimationFrame(step);
+    else currentTotal=target;
   }
+  requestAnimationFrame(step);
+}
+
+function updateHarga(){
+  if(data.produk&&data.durasi){
+    animateTotal(hargaProduk[data.produk][data.durasi]);
+  }else animateTotal(0);
 }
 
 function kirimWA(){
-  const nama = document.getElementById("nama").value;
-  const produk = document.getElementById("produk").value;
-  const durasi = document.getElementById("durasi").value;
-  const payment = document.getElementById("payment").value;
-  const harga = document.getElementById("harga").innerText;
-
-  if(!nama || !produk || !durasi || !payment){
-    alert("Lengkapi semua data terlebih dahulu");
+  if(!nama.value||!data.produk||!data.durasi||!data.payment){
+    alert("Lengkapi semua data");
     return;
   }
 
-  const noWA = "6281274717032"; // GANTI nomor WhatsApp kamu
+  const btn=document.getElementById("btnWA");
+  btn.classList.add("loading");
+  btn.innerHTML=`<div class="spinner"></div> Menghubungkan WhatsApp...`;
 
-  const pesan = `
-📦 *ORDER BARU*
+  const pesan=`📦 *ORDER BARU*
+👤 Nama: ${nama.value}
+📦 Produk: ${data.produk}
+⏳ Durasi: ${data.durasi}
+💳 Pembayaran: ${data.payment}
+💰 Total: ${harga.innerText}`;
 
-👤 Nama: ${nama}
-📦 Produk: ${produk}
-⏳ Durasi: ${durasi}
-💳 Pembayaran: ${payment}
-💰 Total: ${harga}
-
-Mohon diproses ya 🙏
-`;
-
-  const url = "https://wa.me/" + noWA + "?text=" + encodeURIComponent(pesan);
-  window.open(url,"_blank");
+  setTimeout(()=>{
+    window.open("https://wa.me/628xxxxxxxxxx?text="+encodeURIComponent(pesan),"_blank");
+    btn.classList.remove("loading");
+    btn.innerHTML=`<span id="btnText">Kirim ke WhatsApp</span>`;
+  },1000);
 }
 </script>
 
 </body>
-  </html>
+</html>
