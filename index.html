@@ -12,7 +12,7 @@
 *{box-sizing:border-box;font-family:Inter}
 body{margin:0;background:#f1f5f9;padding:20px}
 
-/* ===== LAYOUT ===== */
+/* Layout */
 .container{
   max-width:1100px;
   margin:auto;
@@ -28,7 +28,7 @@ body{margin:0;background:#f1f5f9;padding:20px}
 }
 h2{margin:0 0 15px}
 
-/* ===== FORM ===== */
+/* Form */
 label{font-size:13px;color:#555}
 input,select{
   width:100%;
@@ -38,7 +38,7 @@ input,select{
   margin:6px 0 12px;
 }
 
-/* ===== PRODUK ===== */
+/* Produk */
 .product{
   display:flex;
   justify-content:space-between;
@@ -54,7 +54,7 @@ input,select{
   cursor:pointer;
 }
 
-/* ===== KASIR ===== */
+/* Cart */
 .cart-item{
   display:flex;
   justify-content:space-between;
@@ -77,82 +77,59 @@ button.primary{
   cursor:pointer;
 }
 
-/* ===== STRUK ELEGAN ===== */
+/* Struk Elegan */
 .struk-wrap{
   display:flex;
   justify-content:center;
   margin-top:20px;
 }
-
 .struk{
   width:340px;
-  background:#ffffff;
-  padding:18px 16px;
+  background:#fff;
+  padding:18px;
   border-radius:16px;
-  box-shadow:0 15px 35px rgba(0,0,0,.12);
+  box-shadow:0 15px 35px rgba(0,0,0,.15);
   font-size:13px;
-  color:#111;
 }
-
 .struk-header{
   text-align:center;
-  margin-bottom:10px;
 }
 .struk-header h3{
   margin:0;
   font-size:16px;
-  font-weight:700;
 }
 .struk-header span{
   font-size:12px;
   color:#666;
 }
-
 .hr{
   border-top:1px dashed #ccc;
   margin:10px 0;
 }
-
-.info{
-  font-size:12px;
-  color:#333;
-  line-height:1.6;
-}
-
+.info{font-size:12px;line-height:1.6}
 .row{
   display:flex;
   justify-content:space-between;
   margin:4px 0;
 }
-
-.items{
-  margin-top:6px;
-}
-
 .total-box{
   background:#f8fafc;
   padding:10px;
   border-radius:12px;
   margin-top:8px;
 }
-
-.total-box .row{
-  font-weight:600;
-}
-
 .total-box .grand{
   font-size:15px;
   font-weight:700;
 }
-
 .footer{
   text-align:center;
   font-size:12px;
-  color:#555;
   margin-top:10px;
+  color:#555;
 }
 
-/* ===== ACTION ===== */
+/* Actions */
 .actions{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
@@ -246,122 +223,124 @@ button.primary{
 let cart={}, total=0;
 
 function generateID(){
- return "TRX-"+Date.now().toString().slice(-8);
+  return "TRX-"+Date.now().toString().slice(-8);
 }
 function waktu(){
- let d=new Date();
- return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
+  const d=new Date();
+  return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
 }
 
 function ubahQty(nama,harga,step){
- if(!cart[nama]) cart[nama]={harga,qty:0};
- cart[nama].qty+=step;
- if(cart[nama].qty<0) cart[nama].qty=0;
- document.getElementById("q"+nama).innerText=cart[nama].qty;
- renderCart();
+  if(!cart[nama]) cart[nama]={harga,qty:0};
+  cart[nama].qty+=step;
+  if(cart[nama].qty<0) cart[nama].qty=0;
+  document.getElementById("q"+nama).innerText=cart[nama].qty;
+  renderCart();
 }
 
 function renderCart(){
- let c=document.getElementById("cart");
- c.innerHTML=""; total=0;
- Object.keys(cart).forEach(n=>{
-  let i=cart[n];
-  if(i.qty>0){
-   total+=i.harga*i.qty;
-   c.innerHTML+=`
-   <div class="cart-item">
-     <span>${n} x${i.qty}</span>
-     <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
-   </div>`;
-  }
- });
- document.getElementById("total").innerText=total.toLocaleString();
+  const c=document.getElementById("cart");
+  c.innerHTML=""; total=0;
+  Object.keys(cart).forEach(n=>{
+    const i=cart[n];
+    if(i.qty>0){
+      total+=i.harga*i.qty;
+      c.innerHTML+=`
+        <div class="cart-item">
+          <span>${n} x${i.qty}</span>
+          <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+        </div>`;
+    }
+  });
+  document.getElementById("total").innerText=total.toLocaleString();
 }
 
 function buatStruk(){
- let bayar=Number(bayarInput.value=bayar.value);
- if(bayar<total) return alert("Uang kurang");
+  const nama=document.getElementById("nama").value||"-";
+  const hp=document.getElementById("hp").value||"-";
+  const metode=document.getElementById("metode").value;
+  const bayar=Number(document.getElementById("bayar").value);
 
- let itemHTML="";
- Object.keys(cart).forEach(n=>{
-  let i=cart[n];
-  if(i.qty>0){
-   itemHTML+=`
-   <div class="row">
-     <span>${n} x${i.qty}</span>
-     <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
-   </div>`;
-  }
- });
+  if(total===0) return alert("Belum ada produk");
+  if(bayar<total) return alert("Uang kurang");
 
- document.getElementById("hasil").innerHTML=`
- <div class="struk-wrap">
- <div class="struk" id="struk">
+  let items="";
+  Object.keys(cart).forEach(n=>{
+    const i=cart[n];
+    if(i.qty>0){
+      items+=`
+        <div class="row">
+          <span>${n} x${i.qty}</span>
+          <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+        </div>`;
+    }
+  });
 
-  <div class="struk-header">
-    <h3>STRUK PEMBELIAN</h3>
-    <span>Kasir Online</span>
+  document.getElementById("hasil").innerHTML=`
+  <div class="struk-wrap">
+    <div class="struk" id="struk">
+      <div class="struk-header">
+        <h3>STRUK PEMBELIAN</h3>
+        <span>Kasir Online</span>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="info">
+        ID Transaksi : ${generateID()}<br>
+        Waktu : ${waktu()}<br>
+        Nama : ${nama}<br>
+        No HP : ${hp}
+      </div>
+
+      <div class="hr"></div>
+
+      ${items}
+
+      <div class="total-box">
+        <div class="row"><span>Total</span><span>Rp${total.toLocaleString()}</span></div>
+        <div class="row"><span>Bayar</span><span>Rp${bayar.toLocaleString()}</span></div>
+        <div class="row grand"><span>Kembali</span><span>Rp${(bayar-total).toLocaleString()}</span></div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="info">Metode Pembayaran : <b>${metode}</b></div>
+      <div class="footer">Terima kasih telah berbelanja 🙏</div>
+    </div>
   </div>
 
-  <div class="hr"></div>
-
-  <div class="info">
-    ID Transaksi : ${generateID()}<br>
-    Waktu : ${waktu()}<br>
-    Nama : ${nama.value}<br>
-    No HP : ${hp.value}
-  </div>
-
-  <div class="hr"></div>
-
-  <div class="items">${itemHTML}</div>
-
-  <div class="total-box">
-    <div class="row"><span>Total</span><span>Rp${total.toLocaleString()}</span></div>
-    <div class="row"><span>Bayar</span><span>Rp${bayar.toLocaleString()}</span></div>
-    <div class="row grand"><span>Kembali</span><span>Rp${(bayar-total).toLocaleString()}</span></div>
-  </div>
-
-  <div class="hr"></div>
-
-  <div class="info">Metode Pembayaran : <b>${metode.value}</b></div>
-
-  <div class="footer">Terima kasih telah berbelanja 🙏</div>
-
- </div>
- </div>
-
- <div class="actions">
-  <button class="download" onclick="downloadStruk()">Download</button>
-  <button class="share" onclick="shareStruk()">Bagikan</button>
-  <button class="print" onclick="window.print()">Print</button>
- </div>`;
+  <div class="actions">
+    <button class="download" onclick="downloadStruk()">Download</button>
+    <button class="share" onclick="shareStruk()">Bagikan</button>
+    <button class="print" onclick="window.print()">Print</button>
+  </div>`;
 }
 
 function downloadStruk(){
- html2canvas(document.getElementById("struk"),{scale:2})
- .then(c=>{
-  let a=document.createElement("a");
-  a.href=c.toDataURL("image/png");
-  a.download="struk.png";
-  a.click();
- });
+  const el=document.getElementById("struk");
+  html2canvas(el,{scale:2}).then(c=>{
+    const a=document.createElement("a");
+    a.href=c.toDataURL("image/png");
+    a.download="struk.png";
+    a.click();
+  });
 }
 
 async function shareStruk(){
- html2canvas(document.getElementById("struk"),{scale:2})
- .then(async c=>{
-  c.toBlob(async b=>{
-   let file=new File([b],"struk.png",{type:"image/png"});
-   if(navigator.canShare && navigator.canShare({files:[file]})){
-    await navigator.share({files:[file]});
-   }else{
-    alert("Browser tidak mendukung share gambar");
-   }
+  const el=document.getElementById("struk");
+  html2canvas(el,{scale:2}).then(c=>{
+    c.toBlob(async b=>{
+      const file=new File([b],"struk.png",{type:"image/png"});
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file]});
+      }else{
+        alert("Browser tidak mendukung share gambar");
+      }
+    });
   });
- });
 }
 </script>
 
 </body>
-  </html>
+</html>
