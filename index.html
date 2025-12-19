@@ -10,7 +10,7 @@
 
 <style>
 *{box-sizing:border-box;font-family:Inter}
-body{margin:0;background:#f1f5f9;padding:20px}
+body{margin:0;background:#eef2f7;padding:20px}
 
 /* Layout */
 .container{
@@ -24,7 +24,7 @@ body{margin:0;background:#f1f5f9;padding:20px}
   background:#fff;
   border-radius:18px;
   padding:20px;
-  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
 }
 h2{margin:0 0 15px}
 
@@ -77,55 +77,93 @@ button.primary{
   cursor:pointer;
 }
 
-/* Struk Elegan */
+/* ===== STRUK MODERN ===== */
 .struk-wrap{
   display:flex;
   justify-content:center;
-  margin-top:20px;
+  margin-top:25px;
 }
+
+/* OUTER FRAME */
+.struk-frame{
+  background:linear-gradient(135deg,#4f46e5,#6366f1);
+  padding:3px;
+  border-radius:20px;
+}
+
+/* INNER CARD */
 .struk{
-  width:340px;
-  background:#fff;
+  width:360px;
+  background:#ffffff;
+  border-radius:18px;
   padding:18px;
-  border-radius:16px;
-  box-shadow:0 15px 35px rgba(0,0,0,.15);
   font-size:13px;
+  color:#111;
 }
+
+/* Header */
 .struk-header{
   text-align:center;
+  padding-bottom:12px;
+  border-bottom:1px solid #eee;
 }
 .struk-header h3{
   margin:0;
-  font-size:16px;
+  font-size:17px;
+  font-weight:700;
 }
 .struk-header span{
   font-size:12px;
   color:#666;
 }
-.hr{
-  border-top:1px dashed #ccc;
-  margin:10px 0;
+
+/* Sections */
+.section{
+  margin-top:12px;
 }
-.info{font-size:12px;line-height:1.6}
+.section-title{
+  font-size:11px;
+  font-weight:600;
+  color:#6b7280;
+  margin-bottom:6px;
+  text-transform:uppercase;
+}
+
+.info{
+  font-size:12px;
+  line-height:1.6;
+}
+
 .row{
   display:flex;
   justify-content:space-between;
-  margin:4px 0;
+  margin:6px 0;
 }
+
+.items .row{
+  font-size:13px;
+}
+
+/* Total Box */
 .total-box{
   background:#f8fafc;
-  padding:10px;
-  border-radius:12px;
-  margin-top:8px;
+  padding:12px;
+  border-radius:14px;
+  margin-top:10px;
+}
+.total-box .row{
+  font-weight:600;
 }
 .total-box .grand{
   font-size:15px;
   font-weight:700;
 }
+
+/* Footer */
 .footer{
   text-align:center;
   font-size:12px;
-  margin-top:10px;
+  margin-top:14px;
   color:#555;
 }
 
@@ -134,7 +172,7 @@ button.primary{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
   gap:10px;
-  margin-top:12px;
+  margin-top:14px;
 }
 .actions button{
   padding:10px;
@@ -222,6 +260,8 @@ button.primary{
 <script>
 let cart={}, total=0;
 
+const rupiah = n => n.toLocaleString("id-ID");
+
 function generateID(){
   return "TRX-"+Date.now().toString().slice(-8);
 }
@@ -248,17 +288,17 @@ function renderCart(){
       c.innerHTML+=`
         <div class="cart-item">
           <span>${n} x${i.qty}</span>
-          <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+          <span>Rp${rupiah(i.harga*i.qty)}</span>
         </div>`;
     }
   });
-  document.getElementById("total").innerText=total.toLocaleString();
+  document.getElementById("total").innerText=rupiah(total);
 }
 
 function buatStruk(){
-  const nama=document.getElementById("nama").value||"-";
-  const hp=document.getElementById("hp").value||"-";
-  const metode=document.getElementById("metode").value;
+  const nama=namaInput=nama.value||"-";
+  const hpVal=hp.value||"-";
+  const metode=metodeInput=metode.value;
   const bayar=Number(document.getElementById("bayar").value);
 
   if(total===0) return alert("Belum ada produk");
@@ -271,42 +311,56 @@ function buatStruk(){
       items+=`
         <div class="row">
           <span>${n} x${i.qty}</span>
-          <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+          <span>Rp${rupiah(i.harga*i.qty)}</span>
         </div>`;
     }
   });
 
   document.getElementById("hasil").innerHTML=`
   <div class="struk-wrap">
-    <div class="struk" id="struk">
-      <div class="struk-header">
-        <h3>STRUK PEMBELIAN</h3>
-        <span>Kasir Online</span>
+    <div class="struk-frame">
+      <div class="struk" id="struk">
+
+        <div class="struk-header">
+          <h3>BUKTI PEMBAYARAN</h3>
+          <span>Kasir Online</span>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Transaksi</div>
+          <div class="info">
+            ID : ${generateID()}<br>
+            Waktu : ${waktu()}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Pembeli</div>
+          <div class="info">
+            Nama : ${nama}<br>
+            No HP : ${hpVal}
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Item</div>
+          <div class="items">${items}</div>
+        </div>
+
+        <div class="total-box">
+          <div class="row"><span>Total</span><span>Rp${rupiah(total)}</span></div>
+          <div class="row"><span>Bayar</span><span>Rp${rupiah(bayar)}</span></div>
+          <div class="row grand"><span>Kembali</span><span>Rp${rupiah(bayar-total)}</span></div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Metode Pembayaran</div>
+          <div class="info"><b>${metode}</b></div>
+        </div>
+
+        <div class="footer">Terima kasih telah berbelanja 🙏</div>
+
       </div>
-
-      <div class="hr"></div>
-
-      <div class="info">
-        ID Transaksi : ${generateID()}<br>
-        Waktu : ${waktu()}<br>
-        Nama : ${nama}<br>
-        No HP : ${hp}
-      </div>
-
-      <div class="hr"></div>
-
-      ${items}
-
-      <div class="total-box">
-        <div class="row"><span>Total</span><span>Rp${total.toLocaleString()}</span></div>
-        <div class="row"><span>Bayar</span><span>Rp${bayar.toLocaleString()}</span></div>
-        <div class="row grand"><span>Kembali</span><span>Rp${(bayar-total).toLocaleString()}</span></div>
-      </div>
-
-      <div class="hr"></div>
-
-      <div class="info">Metode Pembayaran : <b>${metode}</b></div>
-      <div class="footer">Terima kasih telah berbelanja 🙏</div>
     </div>
   </div>
 
@@ -343,4 +397,4 @@ async function shareStruk(){
 </script>
 
 </body>
-</html>
+  </html>
