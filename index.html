@@ -10,200 +10,332 @@
 
 <style>
 *{box-sizing:border-box;font-family:Inter}
-body{margin:0;background:#f3f4f6;padding:20px}
-.container{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.card{background:#fff;border-radius:18px;padding:20px;box-shadow:0 10px 25px rgba(0,0,0,.08)}
-h2{margin:0 0 15px}
+body{margin:0;background:#f1f5f9;padding:20px}
 
-/* PRODUK */
-.product{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #eee}
-.product:last-child{border:none}
-button{border:none;padding:8px 14px;border-radius:10px;background:#2563eb;color:#fff;font-weight:600;cursor:pointer}
-button:hover{opacity:.9}
-
-/* KERANJANG */
-.cart-item{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
-.total{font-size:18px;font-weight:700;margin-top:10px}
-
-/* INPUT */
-input{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  margin-top:6px;
+.container{
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+  gap:20px;
 }
 
-/* METODE */
-.metode-box{display:flex;gap:10px;margin-top:10px}
-.metode{
-  flex:1;
-  padding:14px;
-  border-radius:14px;
-  border:2px solid #e5e7eb;
-  text-align:center;
+.card{
+  background:#fff;
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+h2{margin:0 0 15px}
+
+label{font-size:13px;color:#555}
+input,select{
+  width:100%;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  margin:6px 0 12px;
+}
+
+/* PRODUK */
+.product{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 0;
+  border-bottom:1px solid #eee;
+}
+
+.qty{display:flex;gap:8px;align-items:center}
+.qty button{
+  width:28px;height:28px;
+  border:none;border-radius:8px;
+  background:#4f46e5;color:#fff;
+}
+
+/* KASIR */
+.cart-item{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:6px;
+}
+
+.total{
+  font-weight:700;
+  font-size:16px;
+  margin:10px 0;
+}
+
+button.primary{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#4f46e5;
+  color:#fff;
   font-weight:600;
   cursor:pointer;
 }
-.metode.active{
-  border-color:#2563eb;
-  background:#eff6ff;
-}
 
 /* STRUK */
-.struk-wrapper{display:flex;justify-content:center;margin-top:15px}
+.struk-wrap{
+  display:flex;
+  justify-content:center;
+  margin-top:15px;
+}
+
 .struk{
-  width:300px;
+  width:290px;
   background:#fff;
-  padding:16px;
-  border-radius:14px;
+  padding:14px;
+  border-radius:12px;
   font-family:monospace;
   font-size:13px;
-  box-shadow:0 6px 25px rgba(0,0,0,.2);
+  border:1px dashed #bbb;
 }
-.struk h3{text-align:center;margin:0}
+
 .center{text-align:center}
-.line{border-top:1px dashed #999;margin:8px 0}
-.struk-item{display:flex;justify-content:space-between}
+.line{display:flex;justify-content:space-between}
+.section{margin:6px 0}
 
-/* AKSI */
-.action-btn{width:100%;margin-top:10px}
-.download{background:#16a34a}
-.print{background:#0f766e}
+hr{
+  border:none;
+  border-top:1px dashed #999;
+  margin:8px 0;
+}
 
-@media(max-width:768px){.container{grid-template-columns:1fr}}
+/* ACTION */
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.actions button{
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  color:#fff;
+  cursor:pointer;
+}
+
+.download{background:#2563eb}
+.share{background:#22c55e}
+.print{background:#6b7280}
+
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+}
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
 <!-- PRODUK -->
 <div class="card">
-<h2>🛒 Produk</h2>
-<div class="product"><span>Premium User</span><button onclick="addItem('Premium User',10000)">Rp10.000</button></div>
-<div class="product"><span>Sewa Bot Basic</span><button onclick="addItem('Sewa Bot Basic',25000)">Rp25.000</button></div>
-<div class="product"><span>Sewa Bot VVIP</span><button onclick="addItem('Sewa Bot VVIP',50000)">Rp50.000</button></div>
+<h2>🛒 Daftar Produk</h2>
+
+<div class="product">
+<span>Premium User</span>
+<div class="qty">
+<button onclick="ubahQty('Premium User',10000,-1)">-</button>
+<span id="qPremium User">0</span>
+<button onclick="ubahQty('Premium User',10000,1)">+</button>
+</div>
+</div>
+
+<div class="product">
+<span>Sewa Bot Basic</span>
+<div class="qty">
+<button onclick="ubahQty('Sewa Bot Basic',25000,-1)">-</button>
+<span id="qSewa Bot Basic">0</span>
+<button onclick="ubahQty('Sewa Bot Basic',25000,1)">+</button>
+</div>
+</div>
+
+<div class="product">
+<span>Sewa Bot VVIP</span>
+<div class="qty">
+<button onclick="ubahQty('Sewa Bot VVIP',50000,-1)">-</button>
+<span id="qSewa Bot VVIP">0</span>
+<button onclick="ubahQty('Sewa Bot VVIP',50000,1)">+</button>
+</div>
+</div>
 </div>
 
 <!-- KASIR -->
 <div class="card">
 <h2>🧾 Kasir</h2>
 
-<!-- DATA PEMBELI -->
 <label>Nama Pembeli</label>
-<input type="text" id="namaPembeli" placeholder="Contoh: Budi">
+<input id="nama" placeholder="Nama pembeli">
 
-<label>Nomor Pembeli (HP)</label>
-<input type="number" id="hpPembeli" placeholder="08xxxxxxxxxx">
+<label>Nomor WhatsApp</label>
+<input id="hp" placeholder="08xxxxxxxxxx">
 
-<div style="margin-top:15px"></div>
+<label>Metode Pembayaran</label>
+<select id="metode">
+<option>DANA</option>
+<option>QRIS</option>
+<option>GoPay</option>
+</select>
 
 <div id="cart"></div>
 <div class="total">Total: Rp<span id="total">0</span></div>
 
-<h3 style="margin-top:20px">💳 Metode Pembayaran</h3>
-<div class="metode-box">
-<div class="metode" onclick="pilihMetode(this,'DANA')">DANA</div>
-<div class="metode" onclick="pilihMetode(this,'QRIS')">QRIS</div>
-<div class="metode" onclick="pilihMetode(this,'GoPay')">GoPay</div>
-</div>
-<input type="hidden" id="metode">
+<label>Uang Bayar</label>
+<input id="bayar" type="number">
 
-<label style="margin-top:15px;display:block">Uang Bayar</label>
-<input type="number" id="bayar" placeholder="Masukkan nominal">
+<button class="primary" onclick="buatStruk()">Bayar & Buat Struk</button>
 
-<button class="action-btn" onclick="buatStruk()">Bayar & Buat Struk</button>
-<div id="hasilStruk"></div>
+<div id="hasil"></div>
 </div>
 
 </div>
 
 <script>
-let cart=[], total=0;
+let cart={}, total=0;
 
-function addItem(nama,harga){
-cart.push({nama,harga});
-total+=harga;
-renderCart();
+function generateID(){
+  return "TRX-" + Date.now().toString().slice(-6) + Math.floor(Math.random()*90+10);
+}
+
+function formatWaktu(){
+  let d=new Date();
+  return d.toLocaleDateString("id-ID")+" "+d.toLocaleTimeString("id-ID");
+}
+
+function ubahQty(nama,harga,step){
+ if(!cart[nama]) cart[nama]={harga,qty:0};
+ cart[nama].qty+=step;
+ if(cart[nama].qty<0) cart[nama].qty=0;
+ document.getElementById("q"+nama).innerText=cart[nama].qty;
+ renderCart();
 }
 
 function renderCart(){
-let html="";
-cart.forEach(i=>{
-  html+=`<div class="cart-item"><span>${i.nama}</span><span>Rp${i.harga.toLocaleString()}</span></div>`;
-});
-document.getElementById("cart").innerHTML=html;
-document.getElementById("total").innerText=total.toLocaleString();
-}
-
-function pilihMetode(el,m){
-document.querySelectorAll(".metode").forEach(x=>x.classList.remove("active"));
-el.classList.add("active");
-document.getElementById("metode").value=m;
+ let c=document.getElementById("cart");
+ c.innerHTML=""; total=0;
+ Object.keys(cart).forEach(n=>{
+  let i=cart[n];
+  if(i.qty>0){
+   total+=i.harga*i.qty;
+   c.innerHTML+=`
+   <div class="cart-item">
+   <span>${n} x${i.qty}</span>
+   <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+   </div>`;
+  }
+ });
+ document.getElementById("total").innerText=total.toLocaleString();
 }
 
 function buatStruk(){
-const nama=document.getElementById("namaPembeli").value;
-const hp=document.getElementById("hpPembeli").value;
-const bayar=parseInt(document.getElementById("bayar").value);
-const metode=document.getElementById("metode").value;
+ let bayar=Number(document.getElementById("bayar").value);
+ if(bayar<total) return alert("Uang kurang");
 
-if(!nama||!hp) return alert("Isi nama & nomor pembeli");
-if(!metode) return alert("Pilih metode pembayaran");
-if(!bayar||bayar<total) return alert("Uang bayar kurang");
+ let idTrx=generateID();
+ let waktu=formatWaktu();
 
-const no="TRX"+Date.now();
-const tgl=new Date().toLocaleString("id-ID");
-const kembali=bayar-total;
+ let items="";
+ Object.keys(cart).forEach(n=>{
+  let i=cart[n];
+  if(i.qty>0){
+   items+=`
+   <div class="line">
+     <span>${n} x${i.qty}</span>
+     <span>Rp${(i.harga*i.qty).toLocaleString()}</span>
+   </div>`;
+  }
+ });
 
-let items="";
-cart.forEach(i=>{
-items+=`<div class="struk-item"><span>${i.nama}</span><span>${i.harga.toLocaleString()}</span></div>`;
-});
+ document.getElementById("hasil").innerHTML=`
+ <div class="struk-wrap">
+ <div class="struk" id="struk">
 
-document.getElementById("hasilStruk").innerHTML=`
-<div class="struk-wrapper">
-<div class="struk" id="struk">
-<h3>TOKO ONLINE</h3>
-<div class="center">${tgl}</div>
-<div class="center">${no}</div>
+   <div class="center"><b>STRUK PEMBELIAN</b></div>
+   <div class="center">Kasir Online</div>
 
-<div class="line"></div>
-<div>Nama : ${nama}</div>
-<div>HP   : ${hp}</div>
+   <hr>
 
-<div class="line"></div>
-${items}
-<div class="line"></div>
+   <div class="section">
+     ID : ${idTrx}<br>
+     Waktu : ${waktu}
+   </div>
 
-<div class="struk-item"><b>Total</b><b>${total.toLocaleString()}</b></div>
-<div class="struk-item">Bayar<span>${bayar.toLocaleString()}</span></div>
-<div class="struk-item">Kembali<span>${kembali.toLocaleString()}</span></div>
+   <hr>
 
-<div class="line"></div>
-<div class="center">Metode Pembayaran</div>
-<div class="center"><b>${metode}</b></div>
+   <div class="section">
+     Nama : ${nama.value}<br>
+     No HP : ${hp.value}
+   </div>
 
-<div class="line"></div>
-<div class="center">Terima Kasih 🙏</div>
-</div>
-</div>
+   <hr>
 
-<button class="action-btn download" onclick="downloadStruk()">📥 Download Struk</button>
-<button class="action-btn print" onclick="window.print()">🖨 Print</button>
-`;
+   ${items}
+
+   <hr>
+
+   <div class="line"><b>Total</b><b>Rp${total.toLocaleString()}</b></div>
+   <div class="line">Bayar<span>Rp${bayar.toLocaleString()}</span></div>
+   <div class="line">Kembali<span>Rp${(bayar-total).toLocaleString()}</span></div>
+
+   <hr>
+
+   <div class="center">
+     Metode Pembayaran <br>${metode.value}
+   </div>
+
+   <hr>
+
+   <div class="center">Terima kasih 🙏</div>
+
+ </div>
+ </div>
+
+ <div class="actions">
+   <button class="download" onclick="downloadStruk()">Download</button>
+   <button class="share" onclick="shareStruk()">Bagikan</button>
+   <button class="print" onclick="window.print()">Print</button>
+ </div>`;
 }
 
 function downloadStruk(){
-html2canvas(document.getElementById("struk"),{scale:2}).then(c=>{
-let a=document.createElement("a");
-a.download="struk.png";
-a.href=c.toDataURL();
-a.click();
-});
+ html2canvas(document.getElementById("struk"),{scale:2})
+ .then(c=>{
+  let a=document.createElement("a");
+  a.href=c.toDataURL("image/png");
+  a.download="struk.png";
+  a.click();
+ });
+}
+
+async function shareStruk(){
+ html2canvas(document.getElementById("struk"),{scale:2})
+ .then(async c=>{
+  c.toBlob(async b=>{
+   let file=new File([b],"struk.png",{type:"image/png"});
+   if(navigator.canShare && navigator.canShare({files:[file]})){
+    await navigator.share({files:[file]});
+   }else{
+    kirimWA();
+   }
+  });
+ });
+}
+
+function kirimWA(){
+ let hpVal=hp.value;
+ if(hpVal.startsWith("0")) hpVal="62"+hpVal.slice(1);
+ let pesan=`STRUK PEMBELIAN\nID: ${Date.now()}\nTotal: Rp${total.toLocaleString()}`;
+ window.open(`https://wa.me/${hpVal}?text=${encodeURIComponent(pesan)}`,"_blank");
 }
 </script>
 
 </body>
-  </html>
+</html>
